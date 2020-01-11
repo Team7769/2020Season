@@ -7,13 +7,10 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.Subsystems.Drivetrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -29,18 +26,13 @@ public class Robot extends TimedRobot {
    * used for any initialization code.
    */
   private XboxController _driverController;
-  private DifferentialDrive _robotDrive;
-  private CANSparkMax _leftMotor;
-  private CANSparkMax _rightMotor;
+  private Drivetrain _drivetrain;
 
   @Override
   public void robotInit() {
-    _leftMotor = new CANSparkMax(0, MotorType.kBrushless);
-    _rightMotor = new CANSparkMax(1, MotorType.kBrushless);
-    
     _driverController = new XboxController(0);
-    _robotDrive = new DifferentialDrive(_leftMotor, _rightMotor);
-
+    
+    _drivetrain = Drivetrain.GetInstance();
   }
 
   /**
@@ -76,7 +68,7 @@ public class Robot extends TimedRobot {
     double throttle = _driverController.getY(Hand.kLeft);
     double turn = _driverController.getX(Hand.kRight);
 
-    _robotDrive.arcadeDrive(throttle, turn);
+    _drivetrain.FunnyDrive(throttle, turn);
   }
 
   /**
