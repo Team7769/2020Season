@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Configuration.Constants;
 
 public class Drivetrain implements ISubsystem{
 
@@ -15,8 +16,8 @@ public class Drivetrain implements ISubsystem{
     public static Drivetrain instance;
 
     public Drivetrain() {
-        _leftMotor = new CANSparkMax(0, MotorType.kBrushless);
-        _rightMotor = new CANSparkMax(1, MotorType.kBrushless);
+        _leftMotor = new CANSparkMax(Constants.kLeftDriveId, MotorType.kBrushless);
+        _rightMotor = new CANSparkMax(Constants.kRightDriveId, MotorType.kBrushless);
 
         _robotDrive = new DifferentialDrive(_leftMotor, _rightMotor);
     }
@@ -33,6 +34,6 @@ public class Drivetrain implements ISubsystem{
     }
     public void LogTelemetry()
     {
-        SmartDashboard.putNumber("distance", 0);
+        SmartDashboard.putNumber("distance",  1 * .37);
     }
 }

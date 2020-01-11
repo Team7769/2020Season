@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import frc.robot.Configuration.Constants;
 import frc.robot.Subsystems.Drivetrain;
 import frc.robot.Subsystems.ISubsystem;
 
@@ -34,7 +35,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    _driverController = new XboxController(0);
+    _driverController = new XboxController(Constants.kDriverUsbSlot);
     
     _drivetrain = Drivetrain.GetInstance();
     _subsystems = new ArrayList<ISubsystem>();
