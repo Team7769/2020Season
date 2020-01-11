@@ -4,8 +4,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Drivetrain {
+public class Drivetrain implements ISubsystem{
 
     private DifferentialDrive _robotDrive;
     private CANSparkMax _leftMotor;
@@ -29,5 +30,9 @@ public class Drivetrain {
     }
     public void FunnyDrive(double throttle, double turn){
         _robotDrive.arcadeDrive(throttle, turn);
+    }
+    public void LogTelemetry()
+    {
+        SmartDashboard.putNumber("distance", 0);
     }
 }

@@ -7,10 +7,13 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.Subsystems.Drivetrain;
+import frc.robot.Subsystems.ISubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,12 +30,16 @@ public class Robot extends TimedRobot {
    */
   private XboxController _driverController;
   private Drivetrain _drivetrain;
+  private ArrayList<ISubsystem> _subsystems;
 
   @Override
   public void robotInit() {
     _driverController = new XboxController(0);
     
     _drivetrain = Drivetrain.GetInstance();
+    _subsystems = new ArrayList<ISubsystem>();
+
+    _subsystems.add(_drivetrain);
   }
 
   /**
@@ -45,6 +52,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    _subsystems.forEach(s -> s.LogTelemetry());
   }
 
   @Override
