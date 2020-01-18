@@ -10,16 +10,25 @@ import frc.robot.Configuration.Constants;
 public class Drivetrain implements ISubsystem{
 
     private DifferentialDrive _robotDrive;
-    private CANSparkMax _leftMotor;
-    private CANSparkMax _rightMotor;
+
+    private CANSparkMax _leftFrontMotor;
+    private CANSparkMax _leftRearMotor;
+    private CANSparkMax _rightFrontMotor;
+    private CANSparkMax _rightRearMotor;
+
 
     public static Drivetrain instance;
 
     public Drivetrain() {
-        _leftMotor = new CANSparkMax(Constants.kLeftDriveId, MotorType.kBrushless);
-        _rightMotor = new CANSparkMax(Constants.kRightDriveId, MotorType.kBrushless);
+        _leftFrontMotor = new CANSparkMax(Constants.kLeftFrontDriveId, MotorType.kBrushless);
+        _leftRearMotor = new CANSparkMax(Constants.kLeftRearDriveId, MotorType.kBrushless);
+        _rightFrontMotor = new CANSparkMax(Constants.kRightFrontDriveId, MotorType.kBrushless);
+        _rightRearMotor = new CANSparkMax(Constants.kRightRearDriveId, MotorType.kBrushless);
 
-        _robotDrive = new DifferentialDrive(_leftMotor, _rightMotor);
+        _leftRearMotor.follow(_leftFrontMotor);
+        _rightRearMotor.follow(_rightFrontMotor);
+
+        _robotDrive = new DifferentialDrive(_leftFrontMotor, _rightFrontMotor);
     }
     public static Drivetrain GetInstance()
     {
