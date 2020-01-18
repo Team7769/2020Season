@@ -25,6 +25,12 @@ public class Drivetrain implements ISubsystem{
         _rightFrontMotor = new CANSparkMax(Constants.kRightFrontDriveId, MotorType.kBrushless);
         _rightRearMotor = new CANSparkMax(Constants.kRightRearDriveId, MotorType.kBrushless);
 
+        _leftFrontMotor.setOpenLoopRampRate(Constants.kDriveRampRateSeconds);
+        _leftFrontMotor.setSmartCurrentLimit(Constants.kDriveSmartCurrentLimitAmps);
+
+        _rightFrontMotor.setOpenLoopRampRate(Constants.kDriveRampRateSeconds);
+        _rightFrontMotor.setSmartCurrentLimit(Constants.kDriveSmartCurrentLimitAmps);
+
         _leftRearMotor.follow(_leftFrontMotor);
         _rightRearMotor.follow(_rightFrontMotor);
 
