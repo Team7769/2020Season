@@ -17,7 +17,7 @@ public class Drivetrain implements ISubsystem{
     private CANSparkMax _rightRearMotor;
 
 
-    public static Drivetrain instance;
+    private static Drivetrain _instance;
 
     public Drivetrain() {
         _leftFrontMotor = new CANSparkMax(Constants.kLeftFrontDriveId, MotorType.kBrushless);
@@ -38,11 +38,11 @@ public class Drivetrain implements ISubsystem{
     }
     public static Drivetrain GetInstance()
     {
-        if (instance == null)
+        if (_instance == null)
         {
-            instance = new Drivetrain();
+            _instance = new Drivetrain();
         }
-        return instance;
+        return _instance;
     }
     public void FunnyDrive(double throttle, double turn){
         _robotDrive.arcadeDrive(throttle, turn);

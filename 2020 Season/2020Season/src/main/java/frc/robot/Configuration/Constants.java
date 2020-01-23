@@ -9,6 +9,8 @@ public final class Constants {
     public static final int kLeftRearDriveId = 1;
     public static final int kRightFrontDriveId = 2;
     public static final int kRightRearDriveId = 3;
+    public static final int kLeftShooterId = 4;
+    public static final int kRightShooterId = 5;
 
     //Usb Controllers
     public static final int kDriverUsbSlot = 0;
