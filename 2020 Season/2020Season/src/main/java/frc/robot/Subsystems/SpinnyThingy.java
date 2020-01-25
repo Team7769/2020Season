@@ -23,7 +23,7 @@ public class SpinnyThingy implements ISubsystem {
 
     public SpinnyThingy()
     {
-        _colorSensorPort = I2C.Port.kOnboard;
+        _colorSensorPort = I2C.Port.kMXP;
         _colorSensor = new ColorSensorV3(_colorSensorPort);
         _colorMatcher = new ColorMatch();
 
@@ -51,6 +51,7 @@ public class SpinnyThingy implements ISubsystem {
         SmartDashboard.putNumber("colorSensorBlue", color.blue);
         SmartDashboard.putNumber("colorSensorGreen", color.green);
         SmartDashboard.putNumber("colorSensorIR", _colorSensor.getIR());
+        DetectColor(color);
 
     }
     public void DetectColor(Color color){
@@ -70,7 +71,7 @@ public class SpinnyThingy implements ISubsystem {
           }
           SmartDashboard.putString("matchedColor", colorString);
           SmartDashboard.putNumber("matchedColorConfidence", match.confidence);
-
+          
     }
 
     @Override
