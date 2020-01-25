@@ -13,9 +13,11 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.Configuration.Constants;
+import frc.robot.Subsystems.Collector;
 import frc.robot.Subsystems.Drivetrain;
 import frc.robot.Subsystems.ISubsystem;
 import frc.robot.Subsystems.Shooter;
+import frc.robot.Subsystems.SpinnyThingy;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -33,6 +35,8 @@ public class Robot extends TimedRobot {
   private XboxController _driverController;
   private Drivetrain _drivetrain;
   private Shooter _shooter;
+  private Collector _collector;
+  private SpinnyThingy _spinnyThingy;
   private ArrayList<ISubsystem> _subsystems;
 
   @Override
@@ -41,11 +45,15 @@ public class Robot extends TimedRobot {
     
     _drivetrain = Drivetrain.GetInstance();
     _shooter = Shooter.GetInstance();
+    _collector = Collector.GetInstance();
+    _spinnyThingy = SpinnyThingy.GetInstance();
 
     _subsystems = new ArrayList<ISubsystem>();
 
     _subsystems.add(_drivetrain);
     _subsystems.add(_shooter);
+    _subsystems.add(_collector);
+    _subsystems.add(_spinnyThingy);
   }
 
   /**
