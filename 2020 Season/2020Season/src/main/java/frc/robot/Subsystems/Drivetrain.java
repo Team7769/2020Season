@@ -53,4 +53,10 @@ public class Drivetrain implements ISubsystem{
     {
         SmartDashboard.putNumber("distance",  1 * .37);
     }
+
+    @Override
+    public void ReadDashboardData() {
+        // TODO Auto-generated method stub
+
+    }
 }

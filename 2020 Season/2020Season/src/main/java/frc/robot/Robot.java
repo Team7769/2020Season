@@ -59,6 +59,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     _subsystems.forEach(s -> s.LogTelemetry());
+    _subsystems.forEach(s -> s.ReadDashboardData());
+
   }
 
   @Override
@@ -83,6 +85,10 @@ public class Robot extends TimedRobot {
     double turn = _driverController.getX(Hand.kRight);
 
     _drivetrain.FunnyDrive(throttle, turn);
+
+    if (_driverController.getBumper(Hand.kLeft)){
+      _shooter.ManualShoot();
+    }
   }
 
   /**
