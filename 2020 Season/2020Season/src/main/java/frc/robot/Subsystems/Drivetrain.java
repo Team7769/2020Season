@@ -27,9 +27,11 @@ public class Drivetrain implements ISubsystem{
 
         _leftFrontMotor.setOpenLoopRampRate(Constants.kDriveRampRateSeconds);
         _leftFrontMotor.setSmartCurrentLimit(Constants.kDriveSmartCurrentLimitAmps);
+        _leftFrontMotor.setInverted(true);
 
         _rightFrontMotor.setOpenLoopRampRate(Constants.kDriveRampRateSeconds);
         _rightFrontMotor.setSmartCurrentLimit(Constants.kDriveSmartCurrentLimitAmps);
+        _rightFrontMotor.setInverted(true);
 
         _leftRearMotor.follow(_leftFrontMotor);
         _rightRearMotor.follow(_rightFrontMotor);
@@ -45,7 +47,7 @@ public class Drivetrain implements ISubsystem{
         return _instance;
     }
     public void FunnyDrive(double throttle, double turn){
-        _robotDrive.arcadeDrive(throttle, turn);
+        _robotDrive.arcadeDrive(throttle, -turn);
     }
     public void LogTelemetry()
     {
