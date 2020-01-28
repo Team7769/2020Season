@@ -17,7 +17,7 @@ public class Drivetrain implements ISubsystem{
     private CANSparkMax _rightRearMotor;
 
 
-    public static Drivetrain instance;
+    private static Drivetrain _instance;
 
     public Drivetrain() {
         _leftFrontMotor = new CANSparkMax(Constants.kLeftFrontDriveId, MotorType.kBrushless);
@@ -27,9 +27,11 @@ public class Drivetrain implements ISubsystem{
 
         _leftFrontMotor.setOpenLoopRampRate(Constants.kDriveRampRateSeconds);
         _leftFrontMotor.setSmartCurrentLimit(Constants.kDriveSmartCurrentLimitAmps);
+        _leftFrontMotor.setInverted(true);
 
         _rightFrontMotor.setOpenLoopRampRate(Constants.kDriveRampRateSeconds);
         _rightFrontMotor.setSmartCurrentLimit(Constants.kDriveSmartCurrentLimitAmps);
+        _rightFrontMotor.setInverted(true);
 
         _leftRearMotor.follow(_leftFrontMotor);
         _rightRearMotor.follow(_rightFrontMotor);
@@ -38,17 +40,23 @@ public class Drivetrain implements ISubsystem{
     }
     public static Drivetrain GetInstance()
     {
-        if (instance == null)
+        if (_instance == null)
         {
-            instance = new Drivetrain();
+            _instance = new Drivetrain();
         }
-        return instance;
+        return _instance;
     }
     public void FunnyDrive(double throttle, double turn){
-        _robotDrive.arcadeDrive(throttle, turn);
+        _robotDrive.arcadeDrive(throttle, -turn);
     }
     public void LogTelemetry()
     {
         SmartDashboard.putNumber("distance",  1 * .37);
+    }
+
+    @Override
+    public void ReadDashboardData() {
+        // TODO Auto-generated method stub
+
     }
 }

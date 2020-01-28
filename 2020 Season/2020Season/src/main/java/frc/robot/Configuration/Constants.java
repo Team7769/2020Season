@@ -5,10 +5,12 @@ public final class Constants {
     //Test Robot Settings
     
     //CAN Device IDs
-    public static final int kLeftFrontDriveId = 0;
-    public static final int kLeftRearDriveId = 1;
-    public static final int kRightFrontDriveId = 2;
-    public static final int kRightRearDriveId = 3;
+    public static final int kLeftFrontDriveId = 2;
+    public static final int kLeftRearDriveId = 3;
+    public static final int kRightFrontDriveId = 4;
+    public static final int kRightRearDriveId = 5;
+    public static final int kLeftShooterId = 6;
+    public static final int kRightShooterId = 7;
 
     //Usb Controllers
     public static final int kDriverUsbSlot = 0;
