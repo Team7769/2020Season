@@ -48,14 +48,14 @@ public class Robot extends TimedRobot {
     _driverController = new XboxController(Constants.kDriverUsbSlot);
     
     _drivetrain = Drivetrain.GetInstance();
-    _shooter = Shooter.GetInstance();
+    //_shooter = Shooter.GetInstance();
     _collector = Collector.GetInstance();
     //_spinnyThingy = SpinnyThingy.GetInstance();
 
     _subsystems = new ArrayList<ISubsystem>();
 
     _subsystems.add(_drivetrain);
-    _subsystems.add(_shooter);
+    //_subsystems.add(_shooter);
     _subsystems.add(_collector);
     //_subsystems.add(_spinnyThingy);
 
@@ -96,6 +96,14 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     double timestamp = _autonomousLoops * 0.020;
     SmartDashboard.putNumber("Timestamp", timestamp);
+
+    trenchAuto(timestamp);
+    //reverseTrenchTest(timestamp);
+
+    _autonomousLoops++;
+  }
+  public void trenchAuto(double timestamp)
+  {
     switch (_autonomousCase) {
       case 0:
         _drivetrain.startPath();
@@ -105,14 +113,56 @@ public class Robot extends TimedRobot {
         _drivetrain.followPath(timestamp);
         if (_drivetrain.isPathFinished(timestamp))
         {
+          _drivetrain.setTrenchToLinePath();
+          _autonomousLoops = 0;
+          //_autonomousCase++;
+          _autonomousCase = 7769;
+        }
+        break;
+      case 2:
+        _drivetrain.tankDriveVolts(0, 0);
+        if (_autonomousLoops > 50) {
+          _autonomousLoops = 0;
+          timestamp = 0;
+          _drivetrain.startPath();
+          _autonomousCase++;
+        }
+        break;
+      case 3:
+        _drivetrain.followPath(timestamp);
+        if (_drivetrain.isPathFinished(timestamp))
+        {
+          _autonomousCase++;
+        }
+        break;
+      case 4:
+        _drivetrain.tankDriveVolts(0, 0);
+        break;
+      case 7769:
+        _drivetrain.tankDriveVolts(0, 0);
+        break;
+    }
+  }
+  public void reverseTrenchTest(double timestamp)
+  {
+      switch (_autonomousCase) {
+      case 0:
+        _drivetrain.setTrenchToLinePath();
+        _drivetrain.startPath();
+        _autonomousCase++;
+        break;
+      case 1:
+        _drivetrain.followPath(timestamp);
+        if (_drivetrain.isPathFinished(timestamp))
+        {
+          _drivetrain.setTrenchToLinePath();
           _autonomousCase++;
         }
         break;
       case 2:
-        _drivetrain.FunnyDrive(0, 0);
+        _drivetrain.tankDriveVolts(0, 0);
         break;
     }
-    _autonomousLoops++;
   }
 
   /**

@@ -45,10 +45,13 @@ public final class Constants {
     public static final double kTrackwidthMeters = 0.6223;
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
 
-    public static final double kMaxSpeedMetersPerSecond = 1.25;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 1.25;
+    //public static final double kMaxSpeedMetersPerSecond = 1.25;
+    //public static final double kMaxAccelerationMetersPerSecondSquared = 1.25;
 
-    public static final double kPathFollowingkP = 4.1;
+    public static final double kMaxSpeedMetersPerSecond = 2;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 2;
+
+    public static final double kPathFollowingkP = 2.8;
 
     /*
     //Competition Robot Settings

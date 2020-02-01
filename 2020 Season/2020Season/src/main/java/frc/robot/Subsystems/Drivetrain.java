@@ -57,11 +57,11 @@ public class Drivetrain implements ISubsystem{
         _rightEncoder = new Encoder(Constants.kRightEncoderPortA, Constants.kRightEncoderPortB);
         _rightEncoder.setDistancePerPulse(Constants.kDriveDistancePerPulse);
 
-        _leftFrontMotor.setOpenLoopRampRate(Constants.kDriveRampRateSeconds);
-        _leftFrontMotor.setSmartCurrentLimit(Constants.kDriveSmartCurrentLimitAmps);
+        //_leftFrontMotor.setOpenLoopRampRate(Constants.kDriveRampRateSeconds);
+        //_leftFrontMotor.setSmartCurrentLimit(Constants.kDriveSmartCurrentLimitAmps);
 
-        _rightFrontMotor.setOpenLoopRampRate(Constants.kDriveRampRateSeconds);
-        _rightFrontMotor.setSmartCurrentLimit(Constants.kDriveSmartCurrentLimitAmps);
+        //_rightFrontMotor.setOpenLoopRampRate(Constants.kDriveRampRateSeconds);
+        //_rightFrontMotor.setSmartCurrentLimit(Constants.kDriveSmartCurrentLimitAmps);
 
         _leftRearMotor.follow(_leftFrontMotor);
         _rightRearMotor.follow(_rightFrontMotor);
@@ -217,7 +217,11 @@ public class Drivetrain implements ISubsystem{
     }
     public void setPath()
     {
-        var autoVoltageConstraint =
+        _pathFollower.setPath(getTrajectoryConfig());
+    }
+    public TrajectoryConfig getTrajectoryConfig()
+    {
+      var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
             new SimpleMotorFeedforward(Constants.ksVolts,
                                        Constants.kvVoltSecondsPerMeter,
@@ -231,9 +235,13 @@ public class Drivetrain implements ISubsystem{
             .setKinematics(Constants.kDriveKinematics)
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
-        _pathFollower.setPath(config);
-
+            return config;
     }
+    public void setTrenchToLinePath()
+    {
+        _pathFollower.setTrenchToLinePath(getTrajectoryConfig());
+    }
+
     public void startPath()
     {
         _leftDriveVelocityPID.reset();

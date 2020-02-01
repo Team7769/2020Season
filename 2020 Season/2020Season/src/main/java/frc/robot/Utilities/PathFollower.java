@@ -29,6 +29,10 @@ public class PathFollower {
     {
         _currentPath = generateTrajectory(config);
     }
+    public void setTrenchToLinePath(TrajectoryConfig config)
+    {
+        _currentPath = getTrenchToLineTrajectory(config);
+    }
     public Trajectory getCurrentTrajectory()
     {
         return _currentPath;
@@ -42,6 +46,8 @@ public class PathFollower {
         var goal = _currentPath.sample(time);
         var targetSpeeds = _controller.calculate(currentPose, goal);
         SmartDashboard.putNumber("goalDegrees", goal.poseMeters.getRotation().getDegrees());
+        SmartDashboard.putNumber("totalPathTime", _currentPath.getTotalTimeSeconds());
+        SmartDashboard.putNumber("goal", goal.poseMeters.getTranslation().getX());
 
         return Constants.kDriveKinematics.toWheelSpeeds(targetSpeeds);
     }
@@ -56,7 +62,7 @@ public class PathFollower {
         var trajectory = TrajectoryGenerator.generateTrajectory(start, interiorWaypoints, end, config);
         return trajectory;
       }*/
-      private Trajectory generateTrajectory(TrajectoryConfig config) {
+      private Trajectory generateTestTrajectory(TrajectoryConfig config) {
 
         return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
@@ -66,6 +72,30 @@ public class PathFollower {
         ),
         // End 3 meters straight ahead of where we started, facing forward
         new Pose2d(3, 0, new Rotation2d(0)),
+        // Pass config
+        config);
+      }
+      private Trajectory generateTrajectory(TrajectoryConfig config) {
+
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
+        // Pass through these two interior waypoints, making an 's' curve path
+        List.of(
+            new Translation2d(2.6, 1.70)
+        ),
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(5.1, 1.70, new Rotation2d(0)),
+        // Pass config
+        config);
+      }
+      private Trajectory getTrenchToLineTrajectory(TrajectoryConfig config)
+      {
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(5.1, 1.70, new Rotation2d(0)),
+        // Pass through these two interior waypoints, making an 's' curve path
+        List.of(
+            new Translation2d(2.6, 1.70)
+        ),
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(0, 0, new Rotation2d(0)),
         // Pass config
         config);
       }
