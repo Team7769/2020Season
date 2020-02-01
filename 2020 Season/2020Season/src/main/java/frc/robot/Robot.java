@@ -48,14 +48,14 @@ public class Robot extends TimedRobot {
     _driverController = new XboxController(Constants.kDriverUsbSlot);
     
     _drivetrain = Drivetrain.GetInstance();
-    //_shooter = Shooter.GetInstance();
+    _shooter = Shooter.GetInstance();
     _collector = Collector.GetInstance();
     //_spinnyThingy = SpinnyThingy.GetInstance();
 
     _subsystems = new ArrayList<ISubsystem>();
 
     _subsystems.add(_drivetrain);
-    //_subsystems.add(_shooter);
+    _subsystems.add(_shooter);
     _subsystems.add(_collector);
     //_subsystems.add(_spinnyThingy);
 
