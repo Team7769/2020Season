@@ -12,13 +12,11 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Configuration.Constants;
 import frc.robot.Utilities.PathFollower;
 
@@ -56,12 +54,6 @@ public class Drivetrain implements ISubsystem{
 
         _rightEncoder = new Encoder(Constants.kRightEncoderPortA, Constants.kRightEncoderPortB);
         _rightEncoder.setDistancePerPulse(Constants.kDriveDistancePerPulse);
-
-        //_leftFrontMotor.setOpenLoopRampRate(Constants.kDriveRampRateSeconds);
-        //_leftFrontMotor.setSmartCurrentLimit(Constants.kDriveSmartCurrentLimitAmps);
-
-        //_rightFrontMotor.setOpenLoopRampRate(Constants.kDriveRampRateSeconds);
-        //_rightFrontMotor.setSmartCurrentLimit(Constants.kDriveSmartCurrentLimitAmps);
 
         _leftRearMotor.follow(_leftFrontMotor);
         _rightRearMotor.follow(_rightFrontMotor);
@@ -213,13 +205,12 @@ public class Drivetrain implements ISubsystem{
     @Override
     public void ReadDashboardData() {
         // TODO Auto-generated method stub
-
     }
-    public void setPath()
+    public void setLineToTrenchPath()
     {
-        _pathFollower.setPath(getTrajectoryConfig());
+        _pathFollower.setLineToTrenchPath(getTrajectoryConfig(false));
     }
-    public TrajectoryConfig getTrajectoryConfig()
+    public TrajectoryConfig getTrajectoryConfig(boolean isReverse)
     {
       var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
@@ -235,21 +226,23 @@ public class Drivetrain implements ISubsystem{
             .setKinematics(Constants.kDriveKinematics)
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
+            config.setReversed(isReverse);
             return config;
     }
     public void setTrenchToLinePath()
     {
-        _pathFollower.setTrenchToLinePath(getTrajectoryConfig());
+        _pathFollower.setTrenchToLinePath(getTrajectoryConfig(true));
     }
 
     public void startPath()
     {
         _leftDriveVelocityPID.reset();
         _rightDriveVelocityPID.reset();
+        _pathFollower.startPath();
     }
-    public void followPath(double timestamp)
+    public void followPath()
     {
-        var target = _pathFollower.getPathTarget(timestamp, getPose());
+        var target = _pathFollower.getPathTarget(getPose());
 
         var leftOutputTarget = _leftDriveVelocityPID.calculate(getWheelSpeeds().leftMetersPerSecond, target.leftMetersPerSecond);
         var rightOutputTarget = _rightDriveVelocityPID.calculate(getWheelSpeeds().leftMetersPerSecond, target.rightMetersPerSecond);
@@ -260,8 +253,8 @@ public class Drivetrain implements ISubsystem{
         tankDriveVolts(leftOutputTarget + leftFeedForward, rightOutputTarget + rightFeedForward);
 
     }
-    public boolean isPathFinished(double timestamp)
+    public boolean isPathFinished()
     {
-      return timestamp > _pathFollower.getCurrentTrajectory().getTotalTimeSeconds();
+      return _pathFollower.isPathFinished();
     }
 }

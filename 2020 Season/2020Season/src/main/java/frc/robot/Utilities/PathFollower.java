@@ -1,33 +1,41 @@
 package frc.robot.Utilities;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.Configuration.Constants;
 
 public class PathFollower {
     private RamseteController _controller;
     private Trajectory _currentPath;
-    private DifferentialDriveKinematics _kinematics;
+    private Timer _timer;
 
     public PathFollower()
     {
         _controller = new RamseteController();
+        _timer = new Timer();
     }
-    public void setPath(TrajectoryConfig config)
+    public void startPath()
     {
-        _currentPath = generateTrajectory(config);
+        _timer.reset();
+        _timer.start();
+    }
+    public boolean isPathFinished()
+    {
+        return _timer.get() > _currentPath.getTotalTimeSeconds();
+    }
+    public void setLineToTrenchPath(TrajectoryConfig config)
+    {
+        _currentPath = getLineToTrenchTrajectory(config);
     }
     public void setTrenchToLinePath(TrajectoryConfig config)
     {
@@ -41,8 +49,9 @@ public class PathFollower {
     {
         return _currentPath.getInitialPose();
     }
-    public DifferentialDriveWheelSpeeds getPathTarget(double time, Pose2d currentPose)
+    public DifferentialDriveWheelSpeeds getPathTarget(Pose2d currentPose)
     {
+        var time = _timer.get();
         var goal = _currentPath.sample(time);
         var targetSpeeds = _controller.calculate(currentPose, goal);
         SmartDashboard.putNumber("goalDegrees", goal.poseMeters.getRotation().getDegrees());
@@ -75,24 +84,24 @@ public class PathFollower {
         // Pass config
         config);
       }
-      private Trajectory generateTrajectory(TrajectoryConfig config) {
+      private Trajectory getLineToTrenchTrajectory(TrajectoryConfig config) {
 
         return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(2.6, 1.70)
+            new Translation2d(2.6, 1.58)
         ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(5.1, 1.70, new Rotation2d(0)),
+        new Pose2d(5.1, 1.58, new Rotation2d(0)),
         // Pass config
         config);
       }
       private Trajectory getTrenchToLineTrajectory(TrajectoryConfig config)
       {
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(5.1, 1.70, new Rotation2d(0)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(5.1, 1.58, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(2.6, 1.70)
+            new Translation2d(2.6, 1.58)
         ),
         // End 3 meters straight ahead of where we started, facing forward
         new Pose2d(0, 0, new Rotation2d(0)),

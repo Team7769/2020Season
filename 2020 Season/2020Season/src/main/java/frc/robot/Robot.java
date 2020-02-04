@@ -10,6 +10,7 @@ package frc.robot;
 import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -58,10 +59,10 @@ public class Robot extends TimedRobot {
     //_subsystems.add(_shooter);
     _subsystems.add(_collector);
     //_subsystems.add(_spinnyThingy);
-
-    _drivetrain.setPath();
     _autonomousCase = 0;
     _autonomousLoops = 0;
+
+    _drivetrain.setLineToTrenchPath();
   }
 
   /**
@@ -81,6 +82,11 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void disabledPeriodic() {
+    
+  }
+
+  @Override
   public void autonomousInit() {
     _drivetrain.resetEncoders();
     _drivetrain.resetGyro();
@@ -94,15 +100,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    double timestamp = _autonomousLoops * 0.020;
-    SmartDashboard.putNumber("Timestamp", timestamp);
+    SmartDashboard.putNumber("Timestamp", Timer.getMatchTime());
 
-    trenchAuto(timestamp);
+    trenchAuto();
     //reverseTrenchTest(timestamp);
 
     _autonomousLoops++;
   }
-  public void trenchAuto(double timestamp)
+  public void trenchAuto()
   {
     switch (_autonomousCase) {
       case 0:
@@ -110,27 +115,26 @@ public class Robot extends TimedRobot {
         _autonomousCase++;
         break;
       case 1:
-        _drivetrain.followPath(timestamp);
-        if (_drivetrain.isPathFinished(timestamp))
+        _drivetrain.followPath();
+        if (_drivetrain.isPathFinished())
         {
           _drivetrain.setTrenchToLinePath();
           _autonomousLoops = 0;
-          //_autonomousCase++;
-          _autonomousCase = 7769;
+          _autonomousCase++;
+          //_autonomousCase = 7769;
         }
         break;
       case 2:
         _drivetrain.tankDriveVolts(0, 0);
-        if (_autonomousLoops > 50) {
+        if (_autonomousLoops > 0) {
           _autonomousLoops = 0;
-          timestamp = 0;
           _drivetrain.startPath();
           _autonomousCase++;
         }
         break;
       case 3:
-        _drivetrain.followPath(timestamp);
-        if (_drivetrain.isPathFinished(timestamp))
+        _drivetrain.followPath();
+        if (_drivetrain.isPathFinished())
         {
           _autonomousCase++;
         }
@@ -143,7 +147,7 @@ public class Robot extends TimedRobot {
         break;
     }
   }
-  public void reverseTrenchTest(double timestamp)
+  public void reverseTrenchTest()
   {
       switch (_autonomousCase) {
       case 0:
@@ -152,8 +156,8 @@ public class Robot extends TimedRobot {
         _autonomousCase++;
         break;
       case 1:
-        _drivetrain.followPath(timestamp);
-        if (_drivetrain.isPathFinished(timestamp))
+        _drivetrain.followPath();
+        if (_drivetrain.isPathFinished())
         {
           _drivetrain.setTrenchToLinePath();
           _autonomousCase++;
