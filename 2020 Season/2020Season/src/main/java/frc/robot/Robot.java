@@ -136,10 +136,37 @@ public class Robot extends TimedRobot {
         _drivetrain.followPath();
         if (_drivetrain.isPathFinished())
         {
+          _drivetrain.setLineToLeftDiamondPath();
           _autonomousCase++;
         }
         break;
       case 4:
+        _drivetrain.tankDriveVolts(0, 0);
+        _drivetrain.startPath();
+        _autonomousCase++;
+
+        break;
+      case 5:
+        _drivetrain.followPath();
+        if (_drivetrain.isPathFinished())
+        {
+          _drivetrain.setLeftDiamondToLinePath();
+          _autonomousCase++;
+        }
+        break;
+      case 6:
+        _drivetrain.tankDriveVolts(0, 0);
+        _drivetrain.startPath();
+        _autonomousCase++;
+        break;
+      case 7:
+        _drivetrain.followPath();
+        if (_drivetrain.isPathFinished())
+        {
+          _autonomousCase++;
+        }
+        break;
+      case 8:
         _drivetrain.tankDriveVolts(0, 0);
         break;
       case 7769:
