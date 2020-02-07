@@ -9,17 +9,17 @@ import frc.robot.Configuration.Constants;
 
 public class Collector implements ISubsystem {
 
-    private CANSparkMax _LeftCollector;
-    private CANSparkMax _RightCollector;
+    private CANSparkMax _leftCollector;
+    private CANSparkMax _rightCollector;
 
     private static Collector _instance;
     private double _collectorSpeed;
 
     public Collector() {
-        _LeftCollector = new CANSparkMax(Constants.kLeftCollectorId, MotorType.kBrushless);
-        _RightCollector = new CANSparkMax(Constants.kRightCollectorId, MotorType.kBrushless);
+        _leftCollector = new CANSparkMax(Constants.kLeftCollectorId, MotorType.kBrushless);
+        _rightCollector = new CANSparkMax(Constants.kRightCollectorId, MotorType.kBrushless);
 
-        _LeftCollector.follow(_RightCollector);
+        _leftCollector.follow(_rightCollector);
 
         _collectorSpeed = 0;
         SmartDashboard.putNumber("manualCollectorSpeed", _collectorSpeed);
@@ -34,13 +34,13 @@ public class Collector implements ISubsystem {
 
     public void ManualCollect(){
         //_leftMotor.set(_shooterSpeed);
-        _RightCollector.set(_collectorSpeed);
+        _rightCollector.set(_collectorSpeed);
     }
     
 
     @Override
     public void LogTelemetry() {
-        SmartDashboard.putNumber("collectorRPM", _RightCollector.getOpenLoopRampRate());
+        SmartDashboard.putNumber("collectorRPM", _rightCollector.getOpenLoopRampRate());
     }
 
     @Override
