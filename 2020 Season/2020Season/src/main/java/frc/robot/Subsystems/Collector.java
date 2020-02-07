@@ -45,7 +45,7 @@ public class Collector implements ISubsystem {
 
     @Override
     public void ReadDashboardData() {
-        _collectorSpeed = SmartDashboard.getNumber("manualShooterSpeed", 0);
+        _collectorSpeed = SmartDashboard.getNumber("manualCollectorSpeed", 0);
 
     }
 
