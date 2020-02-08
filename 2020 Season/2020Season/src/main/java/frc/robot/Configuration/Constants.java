@@ -14,6 +14,8 @@ public final class Constants {
     public static final int kRightRearDriveId = 5;
     public static final int kLeftShooterId = 6;
     public static final int kRightShooterId = 7;
+    public static final int kLeftCollectorId = 8;
+    public static final int kRightCollectorId = 9;
 
     //Usb Controllers
     public static final int kDriverUsbSlot = 0;
