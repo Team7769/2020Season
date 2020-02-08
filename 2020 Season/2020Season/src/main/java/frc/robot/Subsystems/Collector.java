@@ -40,6 +40,7 @@ public class Collector implements ISubsystem {
 
     @Override
     public void LogTelemetry() {
+        //Marvin code :)
         SmartDashboard.putNumber("collectorRPM", _rightCollector.getOpenLoopRampRate());
     }
 
