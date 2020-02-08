@@ -62,7 +62,6 @@ public class Robot extends TimedRobot {
     _autonomousCase = 0;
     _autonomousLoops = 0;
 
-    _drivetrain.setLineToTrenchPath();
   }
 
   /**
@@ -83,11 +82,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    
+    if (_driverController.getBackButtonPressed())
+    {
+      autonomousInit();
+      
+    }
   }
 
   @Override
   public void autonomousInit() {
+    //_drivetrain.setLineToTrenchPath();
+    _drivetrain.setLineToLeftDiamondPath();
     _drivetrain.resetEncoders();
     _drivetrain.resetGyro();
     _drivetrain.updatePose();
@@ -101,16 +106,68 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     SmartDashboard.putNumber("Timestamp", Timer.getMatchTime());
-
-    trenchAuto();
+    diamondFirstTrenchAuto();
+    //trenchAuto();
     //reverseTrenchTest(timestamp);
 
     _autonomousLoops++;
+  }
+  public void diamondFirstTrenchAuto()
+  {
+    switch (_autonomousCase) {
+      case 0:
+        _drivetrain.setLineToLeftDiamondPath();
+        _drivetrain.startPath();
+        _autonomousCase++;
+        break;
+      case 1:
+        _drivetrain.followPath();
+        if (_drivetrain.isPathFinished())
+        {
+          _drivetrain.setLeftDiamondToTrenchPath();
+          _autonomousLoops = 0;
+          _autonomousCase++;
+          //_autonomousCase = 7769;
+        }
+        break;
+      case 2:
+        _drivetrain.tankDriveVolts(0, 0);
+        if (_autonomousLoops > 0) {
+          _autonomousLoops = 0;
+          _drivetrain.startPath();
+          _autonomousCase++;
+        }
+        break;
+      case 3:
+        _drivetrain.followPath();
+        if (_drivetrain.isPathFinished())
+        {
+          _drivetrain.setAfterLeftDiamondToTrenchPath();
+          _autonomousCase++;
+        }
+        break;
+      case 4:
+        _drivetrain.tankDriveVolts(0, 0);
+        _drivetrain.startPath();
+        _autonomousCase++;
+        break;
+      case 5:
+        _drivetrain.followPath();
+        if (_drivetrain.isPathFinished())
+        {
+          _autonomousCase++;
+        }
+        break;
+      case 6:
+        _drivetrain.FunnyDrive(0, 0);
+        break;
+    }
   }
   public void trenchAuto()
   {
     switch (_autonomousCase) {
       case 0:
+        _drivetrain.setLineToTrenchPath();
         _drivetrain.startPath();
         _autonomousCase++;
         break;
@@ -167,7 +224,7 @@ public class Robot extends TimedRobot {
         }
         break;
       case 8:
-        _drivetrain.tankDriveVolts(0, 0);
+        _drivetrain.FunnyDrive(0, 0);
         break;
       case 7769:
         _drivetrain.tankDriveVolts(0, 0);

@@ -49,6 +49,14 @@ public class PathFollower {
     {
         _currentPath = getLeftDiamondToLineTrajectory(config);
     }
+    public void setLeftDiamondToTrenchPath(TrajectoryConfig config)
+    {
+        _currentPath = getLeftDiamondToTrenchTrajectory(config);
+    }
+    public void setAfterLeftDiamondToTrenchPath(TrajectoryConfig config)
+    {
+        _currentPath = getAfterLeftDiamondToTrenchTrajectory(config);
+    }
     public Trajectory getCurrentTrajectory()
     {
         return _currentPath;
@@ -97,7 +105,7 @@ public class PathFollower {
         return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(2.6, 1.50)
+            new Translation2d(2.2, 1.4)
         ),
         // End 3 meters straight ahead of where we started, facing forward
         new Pose2d(5.1, 1.50, new Rotation2d(0)),
@@ -109,7 +117,7 @@ public class PathFollower {
         return TrajectoryGenerator.generateTrajectory(new Pose2d(5.1, 1.50, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(2.6, 1.50)
+            new Translation2d(2.2, 1.40)
         ),
         // End 3 meters straight ahead of where we started, facing forward
         new Pose2d(0, 0, new Rotation2d(0)),
@@ -121,22 +129,46 @@ public class PathFollower {
         return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(1.84, 0.8)
+            new Translation2d(1.6, 0.6)
         ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3.05, -0.307, Rotation2d.fromDegrees(-45)),
+        new Pose2d(2.75, -0.4, Rotation2d.fromDegrees(-60)),
         // Pass config
         config);
       }
       private Trajectory getLeftDiamondToLineTrajectory(TrajectoryConfig config)
       {
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(3.05, -0.307, Rotation2d.fromDegrees(-45)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(2.75, -0.4, Rotation2d.fromDegrees(-45)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(1.84, 0.8)
+            new Translation2d(1.6, 0.6)
         ),
         // End 3 meters straight ahead of where we started, facing forward
         new Pose2d(0, 0, new Rotation2d(0)),
+        // Pass config
+        config);
+      }
+      private Trajectory getLeftDiamondToTrenchTrajectory(TrajectoryConfig config)
+      {
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(2.75, -0.4, Rotation2d.fromDegrees(-60)),
+        // Pass through these two interior waypoints, making an 's' curve path
+        List.of(
+            new Translation2d(2.358, 0.778)
+        ),
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(1.29, 1.5, new Rotation2d(0)),
+        // Pass config
+        config);
+      }
+      private Trajectory getAfterLeftDiamondToTrenchTrajectory(TrajectoryConfig config)
+      {
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(1.29, 1.5, new Rotation2d(0)),
+        // Pass through these two interior waypoints, making an 's' curve path
+        List.of(
+            new Translation2d(3.25, 1.5)
+        ),
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(5.1, 1.5, new Rotation2d(0)),
         // Pass config
         config);
       }

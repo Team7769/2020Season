@@ -52,7 +52,7 @@ public class Drivetrain implements ISubsystem{
         _leftEncoder = new Encoder(Constants.kLeftEncoderPortA, Constants.kLeftEncoderPortB);
         _leftEncoder.setDistancePerPulse(Constants.kDriveDistancePerPulse);
 
-        _rightEncoder = new Encoder(Constants.kRightEncoderPortA, Constants.kRightEncoderPortB);
+        _rightEncoder = new Encoder(Constants.kRightEncoderPortA, Constants.kRightEncoderPortB, true);
         _rightEncoder.setDistancePerPulse(Constants.kDriveDistancePerPulse);
 
         _leftRearMotor.follow(_leftFrontMotor);
@@ -241,6 +241,14 @@ public class Drivetrain implements ISubsystem{
     {
       _pathFollower.setLeftDiamondToLinePath(getTrajectoryConfig(true));
     }
+    public void setLeftDiamondToTrenchPath()
+    {
+      _pathFollower.setLeftDiamondToTrenchPath(getTrajectoryConfig(true));
+    }
+    public void setAfterLeftDiamondToTrenchPath()
+    {
+      _pathFollower.setAfterLeftDiamondToTrenchPath(getTrajectoryConfig(false));
+    }
 
     public void startPath()
     {
@@ -252,8 +260,13 @@ public class Drivetrain implements ISubsystem{
     {
         var target = _pathFollower.getPathTarget(getPose());
 
+        SmartDashboard.putNumber("leftSpeed", getWheelSpeeds().leftMetersPerSecond);
+        SmartDashboard.putNumber("rightSpeed", getWheelSpeeds().rightMetersPerSecond);
+        SmartDashboard.putNumber("leftTargetSpeed", target.leftMetersPerSecond);
+        SmartDashboard.putNumber("rightTargetSpeed", target.rightMetersPerSecond);
+
         var leftOutputTarget = _leftDriveVelocityPID.calculate(getWheelSpeeds().leftMetersPerSecond, target.leftMetersPerSecond);
-        var rightOutputTarget = _rightDriveVelocityPID.calculate(getWheelSpeeds().leftMetersPerSecond, target.rightMetersPerSecond);
+        var rightOutputTarget = _rightDriveVelocityPID.calculate(getWheelSpeeds().rightMetersPerSecond, target.rightMetersPerSecond);
 
         var leftFeedForward = _feedForward.calculate(target.leftMetersPerSecond);
         var rightFeedForward = _feedForward.calculate(target.rightMetersPerSecond);

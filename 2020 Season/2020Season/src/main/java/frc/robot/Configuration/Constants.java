@@ -53,7 +53,7 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 2;
     public static final double kMaxAccelerationMetersPerSecondSquared = 2;
 
-    public static final double kPathFollowingkP = 3.6;
+    public static final double kPathFollowingkP = 4.5;
 
     /*
     //Competition Robot Settings
