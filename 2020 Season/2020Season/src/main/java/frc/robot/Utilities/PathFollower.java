@@ -81,7 +81,7 @@ public class PathFollower {
       }*/
       private Trajectory generateTestTrajectory(TrajectoryConfig config) {
 
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(Constants.kCenterGoalLineX, Constants.kCenterGoalLineY, new Rotation2d(Constants.kCenterGoalLineStartAngle)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
             new Translation2d(1, 1),
@@ -94,49 +94,49 @@ public class PathFollower {
       }
       private Trajectory getLineToTrenchTrajectory(TrajectoryConfig config) {
 
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(Constants.kCenterGoalLineX, Constants.kCenterGoalLineY, new Rotation2d(Constants.kCenterGoalLineStartAngle)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(2.6, 1.50)
+            new Translation2d(Constants.kTrenchPathMidpointX, Constants.kTrenchPathY)
         ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(5.1, 1.50, new Rotation2d(0)),
+        new Pose2d(Constants.kTrenchPathEndX, Constants.kTrenchPathY, new Rotation2d(Constants.kTrenchPathEndAngle)),
         // Pass config
         config);
       }
       private Trajectory getTrenchToLineTrajectory(TrajectoryConfig config)
       {
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(5.1, 1.50, new Rotation2d(0)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(Constants.kTrenchPathEndX, Constants.kTrenchPathY, new Rotation2d(Constants.kTrenchPathEndAngle)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(2.6, 1.50)
+            new Translation2d(Constants.kTrenchPathMidpointX, Constants.kTrenchPathY)
         ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(0, 0, new Rotation2d(0)),
+        new Pose2d(Constants.kCenterGoalLineX, Constants.kCenterGoalLineY, new Rotation2d(Constants.kCenterGoalLineStartAngle)),
         // Pass config
         config);
       }
       private Trajectory getLineToLeftDiamondTrajectory(TrajectoryConfig config) {
 
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(Constants.kCenterGoalLineX, Constants.kCenterGoalLineY, new Rotation2d(Constants.kCenterGoalLineStartAngle)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(1.84, 0.8)
+            new Translation2d(Constants.kLeftDiamondPathMidpointX, Constants.kLeftDiamondPathMidpointY)
         ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3.05, -0.307, Rotation2d.fromDegrees(-45)),
+        new Pose2d(Constants.kLeftDiamondPathEndX, Constants.kLeftDiamondPathEndY, Rotation2d.fromDegrees(Constants.kLeftDiamondPathEndAngle)),
         // Pass config
         config);
       }
       private Trajectory getLeftDiamondToLineTrajectory(TrajectoryConfig config)
       {
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(3.05, -0.307, Rotation2d.fromDegrees(-45)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(Constants.kLeftDiamondPathEndX, Constants.kLeftDiamondPathEndY, Rotation2d.fromDegrees(Constants.kLeftDiamondPathEndAngle)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(1.84, 0.8)
+            new Translation2d(Constants.kLeftDiamondPathMidpointX, Constants.kLeftDiamondPathMidpointY)
         ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(0, 0, new Rotation2d(0)),
+        new Pose2d(Constants.kCenterGoalLineX, Constants.kCenterGoalLineY, new Rotation2d(Constants.kCenterGoalLineStartAngle)),
         // Pass config
         config);
       }

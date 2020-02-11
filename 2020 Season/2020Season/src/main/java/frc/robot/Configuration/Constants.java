@@ -53,8 +53,24 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 2;
     public static final double kMaxAccelerationMetersPerSecondSquared = 2;
 
+    //Path Following 
     public static final double kPathFollowingkP = 3.6;
-
+    //Starting Point - Center Line
+    public static final int kCenterGoalLineX = 0;
+    public static final int kCenterGoalLineY = 0;
+    public static final int kCenterGoalLineStartAngle = 0;
+    //Trench Path Points
+    public static final double kTrenchPathMidpointX = 2.6;
+    public static final double kTrenchPathEndX = 5.1;
+    public static final double kTrenchPathY = 1.50;
+    public static final double kTrenchPathEndAngle = 0.0;
+    
+    //To-the-Rendevous! Points(from the left)
+    public static final double kLeftDiamondPathMidpointX = 1.84;
+    public static final double kLeftDiamondPathMidpointY = 0.8;
+    public static final double kLeftDiamondPathEndX = 3.05;
+    public static final double kLeftDiamondPathEndY = -0.307;
+    public static final int kLeftDiamondPathEndAngle = -45;
     /*
     //Competition Robot Settings
     public static final int kLeftDriveId = 0;
