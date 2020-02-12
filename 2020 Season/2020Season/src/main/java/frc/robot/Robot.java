@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
 
   private int _autonomousLoops;
   private int _autonomousCase;
+  private int _aimLoops;
 
   @Override
   public void robotInit() {
@@ -61,8 +62,7 @@ public class Robot extends TimedRobot {
     //_subsystems.add(_spinnyThingy);
     _autonomousCase = 0;
     _autonomousLoops = 0;
-
-    _drivetrain.setLineToTrenchPath();
+    _aimLoops = 0;
   }
 
   /**
@@ -83,16 +83,24 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    
+    if (_driverController.getBackButtonPressed())
+    {
+      autonomousInit();
+      
+    }
   }
 
   @Override
   public void autonomousInit() {
+    //_drivetrain.setLineToTrenchPath();
+    _drivetrain.setLineToLeftDiamondPath();
     _drivetrain.resetEncoders();
     _drivetrain.resetGyro();
     _drivetrain.updatePose();
+    _drivetrain.resetPIDControllers();
     _autonomousLoops = 0;
     _autonomousCase = 0;
+    _aimLoops = 0;
   }
 
   /**
@@ -101,16 +109,77 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     SmartDashboard.putNumber("Timestamp", Timer.getMatchTime());
-
-    trenchAuto();
+    diamondFirstTrenchAuto();
+    //trenchAuto();
     //reverseTrenchTest(timestamp);
+    //turnTestAuto();
 
     _autonomousLoops++;
+  }
+  public void diamondFirstTrenchAuto()
+  {
+    switch (_autonomousCase) {
+      case 0:
+        _drivetrain.setLineToLeftDiamondPath();
+        _drivetrain.startPath();
+        _autonomousCase++;
+        break;
+      case 1:
+        _drivetrain.followPath();
+        if (_drivetrain.isPathFinished())
+        {
+          _drivetrain.setLeftDiamondToTrenchPath();
+          _autonomousLoops = 0;
+          _autonomousCase++;
+          //_autonomousCase = 7769;
+        }
+        break;
+      case 2:
+        _drivetrain.tankDriveVolts(0, 0);
+        if (_autonomousLoops > 0) {
+          _autonomousLoops = 0;
+          _drivetrain.startPath();
+          _autonomousCase++;
+        }
+        break;
+      case 3:
+        _drivetrain.followPath();
+        if (_drivetrain.isPathFinished())
+        {
+          _drivetrain.setAfterLeftDiamondToTrenchPath();
+          _autonomousCase++;
+        }
+        break;
+      case 4:
+        _drivetrain.tankDriveVolts(0, 0);
+        _drivetrain.startPath();
+        _autonomousCase++;
+        break;
+      case 5:
+        _drivetrain.followPath();
+        if (_drivetrain.isPathFinished())
+        {
+          _autonomousCase++;
+        }
+        break;
+      case 6:
+        if (turnToAngle(10.1))
+        {
+          _autonomousCase++;
+        } else {
+          _aimLoops = 0;
+        }
+        break;
+      case 7:
+        _drivetrain.FunnyDrive(0, 0);
+        break;
+    }
   }
   public void trenchAuto()
   {
     switch (_autonomousCase) {
       case 0:
+        _drivetrain.setLineToTrenchPath();
         _drivetrain.startPath();
         _autonomousCase++;
         break;
@@ -167,7 +236,7 @@ public class Robot extends TimedRobot {
         }
         break;
       case 8:
-        _drivetrain.tankDriveVolts(0, 0);
+        _drivetrain.FunnyDrive(0, 0);
         break;
       case 7769:
         _drivetrain.tankDriveVolts(0, 0);
@@ -196,6 +265,23 @@ public class Robot extends TimedRobot {
     }
   }
 
+  public void turnTestAuto()
+  {
+    switch (_autonomousCase)
+    {
+      case 0:
+        if (turnToAngle(135))
+        {
+          _autonomousCase++;
+        } else {
+          _autonomousLoops = 0;
+        }
+        break;
+      case 1:
+        _drivetrain.tankDriveVolts(0, 0);
+        break;
+    }
+  }
   /**
    * This function is called periodically during operator control.
    */
@@ -216,5 +302,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  public boolean turnToAngle(double angle)
+  {
+    _drivetrain.turnToAngle(angle);
+    if (_drivetrain.isTurnFinished())
+    {
+      _aimLoops++;
+    }
+    return _drivetrain.isTurnFinished() && _aimLoops > 50;
   }
 }

@@ -36,6 +36,7 @@ public class Drivetrain implements ISubsystem{
 
     private PIDController _leftDriveVelocityPID;
     private PIDController _rightDriveVelocityPID;
+    private PIDController _turnPID;
 
 
     private static Drivetrain _instance;
@@ -52,7 +53,7 @@ public class Drivetrain implements ISubsystem{
         _leftEncoder = new Encoder(Constants.kLeftEncoderPortA, Constants.kLeftEncoderPortB);
         _leftEncoder.setDistancePerPulse(Constants.kDriveDistancePerPulse);
 
-        _rightEncoder = new Encoder(Constants.kRightEncoderPortA, Constants.kRightEncoderPortB);
+        _rightEncoder = new Encoder(Constants.kRightEncoderPortA, Constants.kRightEncoderPortB, true);
         _rightEncoder.setDistancePerPulse(Constants.kDriveDistancePerPulse);
 
         _leftRearMotor.follow(_leftFrontMotor);
@@ -65,10 +66,17 @@ public class Drivetrain implements ISubsystem{
 
         _leftDriveVelocityPID = new PIDController(Constants.kPathFollowingkP, 0.0, 0.0);
         _rightDriveVelocityPID = new PIDController(Constants.kPathFollowingkP, 0.0, 0.0);
+        _turnPID = new PIDController(Constants.kTurnkP, Constants.kTurnkI, Constants.kTurnkD);
+        _turnPID.setTolerance(1.75);
 
         _feedForward = new SimpleMotorFeedforward(Constants.ksVolts,
         Constants.kvVoltSecondsPerMeter,
         Constants.kaVoltSecondsSquaredPerMeter);
+
+        
+        SmartDashboard.putNumber("turnP", _turnPID.getP());
+        SmartDashboard.putNumber("turnI", _turnPID.getI());
+        SmartDashboard.putNumber("turnD", _turnPID.getD());
     }
     public static Drivetrain GetInstance()
     {
@@ -90,6 +98,7 @@ public class Drivetrain implements ISubsystem{
         SmartDashboard.putNumber("rightDriveDistance", _rightEncoder.getDistance());
         SmartDashboard.putNumber("rightDriveVelocity", _rightEncoder.getRate());
         SmartDashboard.putNumber("gyroAngle", getHeading());
+
         
     }
      /**
@@ -241,6 +250,14 @@ public class Drivetrain implements ISubsystem{
     {
       _pathFollower.setLeftDiamondToLinePath(getTrajectoryConfig(true));
     }
+    public void setLeftDiamondToTrenchPath()
+    {
+      _pathFollower.setLeftDiamondToTrenchPath(getTrajectoryConfig(true));
+    }
+    public void setAfterLeftDiamondToTrenchPath()
+    {
+      _pathFollower.setAfterLeftDiamondToTrenchPath(getTrajectoryConfig(false));
+    }
 
     public void startPath()
     {
@@ -252,8 +269,13 @@ public class Drivetrain implements ISubsystem{
     {
         var target = _pathFollower.getPathTarget(getPose());
 
+        SmartDashboard.putNumber("leftSpeed", getWheelSpeeds().leftMetersPerSecond);
+        SmartDashboard.putNumber("rightSpeed", getWheelSpeeds().rightMetersPerSecond);
+        SmartDashboard.putNumber("leftTargetSpeed", target.leftMetersPerSecond);
+        SmartDashboard.putNumber("rightTargetSpeed", target.rightMetersPerSecond);
+
         var leftOutputTarget = _leftDriveVelocityPID.calculate(getWheelSpeeds().leftMetersPerSecond, target.leftMetersPerSecond);
-        var rightOutputTarget = _rightDriveVelocityPID.calculate(getWheelSpeeds().leftMetersPerSecond, target.rightMetersPerSecond);
+        var rightOutputTarget = _rightDriveVelocityPID.calculate(getWheelSpeeds().rightMetersPerSecond, target.rightMetersPerSecond);
 
         var leftFeedForward = _feedForward.calculate(target.leftMetersPerSecond);
         var rightFeedForward = _feedForward.calculate(target.rightMetersPerSecond);
@@ -264,5 +286,37 @@ public class Drivetrain implements ISubsystem{
     public boolean isPathFinished()
     {
       return _pathFollower.isPathFinished();
+    }
+    public void turnToAngle(double angle)
+    {
+      _turnPID.setP(SmartDashboard.getNumber("turnP", 0));
+      _turnPID.setI(SmartDashboard.getNumber("turnI", 0));
+      _turnPID.setD(SmartDashboard.getNumber("turnD", 0));
+      var output = _turnPID.calculate(getHeading(), angle);
+      SmartDashboard.putNumber("turnOutput", output);
+      if (Math.abs(output) > 0.5)
+      {
+        if (output > 0)
+        {
+          output = 0.5;
+        } else {
+          output = -0.5;
+        }
+      }
+      arcadeDriveBrake(0, -output);
+    }
+    public boolean isTurnFinished()
+    {
+      return _turnPID.atSetpoint();
+    }
+    public void arcadeDriveBrake(double throttle, double turn)
+    {
+        _rightFrontMotor.setIdleMode(IdleMode.kBrake);
+        _leftFrontMotor.setIdleMode(IdleMode.kBrake);
+        _robotDrive.arcadeDrive(throttle, turn);
+    }
+    public void resetPIDControllers()
+    {
+      _turnPID.reset();
     }
 }
