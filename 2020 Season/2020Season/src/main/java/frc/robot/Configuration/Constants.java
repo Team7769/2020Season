@@ -55,6 +55,9 @@ public final class Constants {
 
     public static final double kPathFollowingkP = 4.5;
 
+    public static final double kTurnkP = 0.0575;
+    public static final double kTurnkI = 0.0;
+    public static final double kTurnkD = 0.0025;
     /*
     //Competition Robot Settings
     public static final int kLeftDriveId = 0;

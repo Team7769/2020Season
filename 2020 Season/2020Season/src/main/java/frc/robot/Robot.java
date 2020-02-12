@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
 
   private int _autonomousLoops;
   private int _autonomousCase;
+  private int _aimLoops;
 
   @Override
   public void robotInit() {
@@ -61,7 +62,7 @@ public class Robot extends TimedRobot {
     //_subsystems.add(_spinnyThingy);
     _autonomousCase = 0;
     _autonomousLoops = 0;
-
+    _aimLoops = 0;
   }
 
   /**
@@ -96,8 +97,10 @@ public class Robot extends TimedRobot {
     _drivetrain.resetEncoders();
     _drivetrain.resetGyro();
     _drivetrain.updatePose();
+    _drivetrain.resetPIDControllers();
     _autonomousLoops = 0;
     _autonomousCase = 0;
+    _aimLoops = 0;
   }
 
   /**
@@ -109,6 +112,7 @@ public class Robot extends TimedRobot {
     diamondFirstTrenchAuto();
     //trenchAuto();
     //reverseTrenchTest(timestamp);
+    //turnTestAuto();
 
     _autonomousLoops++;
   }
@@ -159,6 +163,14 @@ public class Robot extends TimedRobot {
         }
         break;
       case 6:
+        if (turnToAngle(10.1))
+        {
+          _autonomousCase++;
+        } else {
+          _aimLoops = 0;
+        }
+        break;
+      case 7:
         _drivetrain.FunnyDrive(0, 0);
         break;
     }
@@ -253,6 +265,23 @@ public class Robot extends TimedRobot {
     }
   }
 
+  public void turnTestAuto()
+  {
+    switch (_autonomousCase)
+    {
+      case 0:
+        if (turnToAngle(135))
+        {
+          _autonomousCase++;
+        } else {
+          _autonomousLoops = 0;
+        }
+        break;
+      case 1:
+        _drivetrain.tankDriveVolts(0, 0);
+        break;
+    }
+  }
   /**
    * This function is called periodically during operator control.
    */
@@ -273,5 +302,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  public boolean turnToAngle(double angle)
+  {
+    _drivetrain.turnToAngle(angle);
+    if (_drivetrain.isTurnFinished())
+    {
+      _aimLoops++;
+    }
+    return _drivetrain.isTurnFinished() && _aimLoops > 50;
   }
 }
