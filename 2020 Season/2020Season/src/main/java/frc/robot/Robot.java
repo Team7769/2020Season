@@ -20,6 +20,7 @@ import frc.robot.Subsystems.Drivetrain;
 import frc.robot.Subsystems.ISubsystem;
 import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.SpinnyThingy;
+import frc.robot.Utilities.LEDController;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -41,15 +42,19 @@ public class Robot extends TimedRobot {
   private SpinnyThingy _spinnyThingy;
   private ArrayList<ISubsystem> _subsystems;
 
+  private LEDController _ledController;
+
   private int _autonomousLoops;
   private int _autonomousCase;
   private int _aimLoops;
+  private double _ledValue;
 
   @Override
   public void robotInit() {
     _driverController = new XboxController(Constants.kDriverUsbSlot);
     
     _drivetrain = Drivetrain.GetInstance();
+    _ledController = LEDController.GetInstance();
     //_shooter = Shooter.GetInstance();
     //_collector = Collector.GetInstance();
     //_spinnyThingy = SpinnyThingy.GetInstance();
@@ -63,6 +68,8 @@ public class Robot extends TimedRobot {
     _autonomousCase = 0;
     _autonomousLoops = 0;
     _aimLoops = 0;
+    _ledValue = -0.99;
+    SmartDashboard.putNumber("ledValue", _ledValue);
   }
 
   /**
@@ -295,6 +302,23 @@ public class Robot extends TimedRobot {
     if (_driverController.getBumper(Hand.kLeft)){
       _shooter.ManualShoot();
     }
+
+    if (_driverController.getBackButtonPressed())
+    {
+      _ledValue -= 0.02;
+      if (_ledValue <= -1)
+      {
+        _ledValue = -0.99;
+      }
+    } else if (_driverController.getStartButtonPressed()) {
+      _ledValue += 0.02;
+      if (_ledValue >= 1)
+      {
+        _ledValue = 0.99;
+      }
+    }
+    SmartDashboard.putNumber("ledValue", _ledValue);
+    _ledController.setLED(_ledValue);
   }
 
   /**
