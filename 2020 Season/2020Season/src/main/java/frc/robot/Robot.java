@@ -357,10 +357,6 @@ public class Robot extends TimedRobot {
     _ledController.setLED(_ledValue);
   }
 
-  public void teleopTrackTarget()
-  {
-    
-  }
   /**
    * This function is called periodically during test mode.
    */
