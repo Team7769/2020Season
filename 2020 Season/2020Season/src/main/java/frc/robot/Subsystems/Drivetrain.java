@@ -18,12 +18,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.robot.Configuration.Constants;
+import frc.robot.Utilities.Limelight;
 import frc.robot.Utilities.PathFollower;
 
 public class Drivetrain implements ISubsystem{
 
     private DifferentialDrive _robotDrive;
     private PathFollower _pathFollower;
+    private Limelight _limelight;
 
     private CANSparkMax _leftFrontMotor;
     private CANSparkMax _leftRearMotor;
@@ -67,7 +69,7 @@ public class Drivetrain implements ISubsystem{
         _leftDriveVelocityPID = new PIDController(Constants.kPathFollowingkP, 0.0, 0.0);
         _rightDriveVelocityPID = new PIDController(Constants.kPathFollowingkP, 0.0, 0.0);
         _turnPID = new PIDController(Constants.kTurnkP, Constants.kTurnkI, Constants.kTurnkD);
-        _turnPID.setTolerance(1.75);
+        _turnPID.setTolerance(0.5);
 
         _feedForward = new SimpleMotorFeedforward(Constants.ksVolts,
         Constants.kvVoltSecondsPerMeter,
@@ -77,6 +79,8 @@ public class Drivetrain implements ISubsystem{
         SmartDashboard.putNumber("turnP", _turnPID.getP());
         SmartDashboard.putNumber("turnI", _turnPID.getI());
         SmartDashboard.putNumber("turnD", _turnPID.getD());
+
+        _limelight = Limelight.GetInstance();
     }
     public static Drivetrain GetInstance()
     {
@@ -318,5 +322,47 @@ public class Drivetrain implements ISubsystem{
     public void resetPIDControllers()
     {
       _turnPID.reset();
+    }
+    public boolean trackTarget()
+    {
+      if (!_limelight.hasTarget())
+      {
+        return false;
+      }
+      var limelightTargetAngle = _limelight.getAngleToTarget();
+
+      var targetAngle = getHeading() - limelightTargetAngle;
+
+      turnToAngle(targetAngle);
+
+      return isTurnFinished();
+
+    }
+    public double followTarget()
+    {
+      if (!_limelight.hasTarget())
+      {
+        return 0;
+      }
+      var limelightTargetAngle = _limelight.getAngleToTarget();
+
+      var targetAngle = getHeading() - limelightTargetAngle;
+
+      
+      _turnPID.setP(SmartDashboard.getNumber("turnP", 0));
+      _turnPID.setI(SmartDashboard.getNumber("turnI", 0));
+      _turnPID.setD(SmartDashboard.getNumber("turnD", 0));
+      var output = _turnPID.calculate(getHeading(), targetAngle);
+      SmartDashboard.putNumber("turnOutput", output);
+      if (Math.abs(output) > 0.5)
+      {
+        if (output > 0)
+        {
+          output = 0.5;
+        } else {
+          output = -0.5;
+        }
+      }
+      return output;
     }
 }

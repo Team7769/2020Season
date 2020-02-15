@@ -1,7 +1,6 @@
 package frc.robot.Configuration;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.wpilibj.util.Units;
 
 public final class Constants {
 
@@ -31,6 +30,9 @@ public final class Constants {
     public static final int kRightEncoderPortA = 2;
     public static final int kRightEncoderPortB = 3;
 
+    //Analog
+    public static final int kIntakeSensorPort = 0;
+
     public static final int kDriveEncoderTicksPerRevolution = 2048;
     public static final double kDriveWheelDiameter = 0.15;
     public static final double kDriveDistancePerPulse = (kDriveWheelDiameter * Math.PI) / kDriveEncoderTicksPerRevolution;
@@ -55,9 +57,11 @@ public final class Constants {
 
     public static final double kPathFollowingkP = 4.5;
 
-    public static final double kTurnkP = 0.0575;
+    public static final double kTurnkP = 0.067;
     public static final double kTurnkI = 0.0;
-    public static final double kTurnkD = 0.0025;
+    public static final double kTurnkD = 0.0035;
+
+    public static final double kGoalHeight = 4.26; //feet
     /*
     //Competition Robot Settings
     public static final int kLeftDriveId = 0;
