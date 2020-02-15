@@ -338,4 +338,31 @@ public class Drivetrain implements ISubsystem{
       return isTurnFinished();
 
     }
+    public double followTarget()
+    {
+      if (!_limelight.hasTarget())
+      {
+        return 0;
+      }
+      var limelightTargetAngle = _limelight.getAngleToTarget();
+
+      var targetAngle = getHeading() - limelightTargetAngle;
+
+      
+      _turnPID.setP(SmartDashboard.getNumber("turnP", 0));
+      _turnPID.setI(SmartDashboard.getNumber("turnI", 0));
+      _turnPID.setD(SmartDashboard.getNumber("turnD", 0));
+      var output = _turnPID.calculate(getHeading(), targetAngle);
+      SmartDashboard.putNumber("turnOutput", output);
+      if (Math.abs(output) > 0.5)
+      {
+        if (output > 0)
+        {
+          output = 0.5;
+        } else {
+          output = -0.5;
+        }
+      }
+      return output;
+    }
 }

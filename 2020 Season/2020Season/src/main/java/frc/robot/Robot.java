@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
     _drivetrain = Drivetrain.GetInstance();
     _ledController = LEDController.GetInstance();
     //_shooter = Shooter.GetInstance();
-    //_collector = Collector.GetInstance();
+    _collector = Collector.GetInstance();
     //_spinnyThingy = SpinnyThingy.GetInstance();
     _limelight = Limelight.GetInstance();
 
@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
 
     _subsystems.add(_drivetrain);
     //_subsystems.add(_shooter);
-    //_subsystems.add(_collector);
+    _subsystems.add(_collector);
     //_subsystems.add(_spinnyThingy);
     _autonomousCase = 0;
     _autonomousLoops = 0;
@@ -306,9 +306,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    teleopShoot();
+    //teleopShoot();
     teleopDrive();
-    teleopLEDs();
+    //teleopLEDs();
   }
   public void teleopShoot()
   {
@@ -319,15 +319,21 @@ public class Robot extends TimedRobot {
 
   public void teleopDrive()
   {
+    double augmentTurn = 0;
     if (_driverController.getBumper(Hand.kRight))
     {
-      _drivetrain.trackTarget();
-    } else {
-      double throttle = -_driverController.getY(Hand.kLeft);
-      double turn = _driverController.getX(Hand.kRight);
-  
-      _drivetrain.FunnyDrive(throttle, turn);
+      augmentTurn = _drivetrain.followTarget();
     }
+    double throttle = -_driverController.getY(Hand.kLeft);
+    double turn = _driverController.getX(Hand.kRight);
+  
+    _drivetrain.FunnyDrive(throttle, turn - augmentTurn);
+    if (_drivetrain.isTurnFinished())
+      {
+        _ledController.setOnTargetState();
+      } else {
+        _ledController.setTrackingTargetState();
+      }
    
 
   }
