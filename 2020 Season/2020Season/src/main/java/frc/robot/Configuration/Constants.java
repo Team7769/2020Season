@@ -1,7 +1,6 @@
 package frc.robot.Configuration;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.wpilibj.util.Units;
 
 public final class Constants {
 
@@ -58,6 +57,8 @@ public final class Constants {
     public static final double kTurnkP = 0.0575;
     public static final double kTurnkI = 0.0;
     public static final double kTurnkD = 0.0025;
+
+    public static final double kGoalHeight = 4.96; //feet
     /*
     //Competition Robot Settings
     public static final int kLeftDriveId = 0;

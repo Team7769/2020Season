@@ -21,6 +21,7 @@ import frc.robot.Subsystems.ISubsystem;
 import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.SpinnyThingy;
 import frc.robot.Utilities.LEDController;
+import frc.robot.Utilities.Limelight;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -40,6 +41,7 @@ public class Robot extends TimedRobot {
   private Shooter _shooter;
   private Collector _collector;
   private SpinnyThingy _spinnyThingy;
+  private Limelight _limelight;
   private ArrayList<ISubsystem> _subsystems;
 
   private LEDController _ledController;
@@ -48,6 +50,7 @@ public class Robot extends TimedRobot {
   private int _autonomousCase;
   private int _aimLoops;
   private double _ledValue;
+  private double _goalDistance;
 
   @Override
   public void robotInit() {
@@ -58,6 +61,7 @@ public class Robot extends TimedRobot {
     //_shooter = Shooter.GetInstance();
     //_collector = Collector.GetInstance();
     //_spinnyThingy = SpinnyThingy.GetInstance();
+    _limelight = Limelight.GetInstance();
 
     _subsystems = new ArrayList<ISubsystem>();
 
@@ -68,6 +72,7 @@ public class Robot extends TimedRobot {
     _autonomousCase = 0;
     _autonomousLoops = 0;
     _aimLoops = 0;
+    _goalDistance = 0;
     _ledValue = -0.99;
     SmartDashboard.putNumber("ledValue", _ledValue);
   }
@@ -86,6 +91,10 @@ public class Robot extends TimedRobot {
     _subsystems.forEach(s -> s.ReadDashboardData());
 
     _drivetrain.updatePose();
+
+    getTargetDistance();
+
+    SmartDashboard.putNumber("goalDistance", _goalDistance);
   }
 
   @Override
@@ -294,15 +303,33 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    double throttle = -_driverController.getY(Hand.kLeft);
-    double turn = _driverController.getX(Hand.kRight);
-
-    _drivetrain.FunnyDrive(throttle, turn);
-
+    teleopShoot();
+    teleopDrive();
+    teleopLEDs();
+  }
+  public void teleopShoot()
+  {
     if (_driverController.getBumper(Hand.kLeft)){
       _shooter.ManualShoot();
     }
+  }
 
+  public void teleopDrive()
+  {
+    if (_driverController.getBumper(Hand.kRight))
+    {
+      _drivetrain.trackTarget();
+    } else {
+      double throttle = -_driverController.getY(Hand.kLeft);
+      double turn = _driverController.getX(Hand.kRight);
+  
+      _drivetrain.FunnyDrive(throttle, turn);
+    }
+   
+
+  }
+  public void teleopLEDs()
+  {
     if (_driverController.getBackButtonPressed())
     {
       _ledValue -= 0.02;
@@ -321,6 +348,10 @@ public class Robot extends TimedRobot {
     _ledController.setLED(_ledValue);
   }
 
+  public void teleopTrackTarget()
+  {
+    
+  }
   /**
    * This function is called periodically during test mode.
    */
@@ -336,5 +367,18 @@ public class Robot extends TimedRobot {
       _aimLoops++;
     }
     return _drivetrain.isTurnFinished() && _aimLoops > 50;
+  }
+
+  public double getTargetDistance()
+  {
+    if (!_limelight.hasTarget())
+    {
+      _goalDistance = 0;
+      return 0;
+    }
+    var targetYOffset = _limelight.getYAngle();
+    _goalDistance = Constants.kGoalHeight / Math.tan(targetYOffset);
+
+    return _goalDistance;
   }
 }
