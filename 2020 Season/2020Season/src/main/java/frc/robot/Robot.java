@@ -315,6 +315,23 @@ public class Robot extends TimedRobot {
     if (_driverController.getBumper(Hand.kLeft)){
       _shooter.ManualShoot();
     }
+    if (_driverController.getAButton())
+    {
+      _shooter.setPopShot();
+    } else if (_driverController.getXButton())
+    {
+      _shooter.setLineShot();
+    } else if (_driverController.getYButton())
+    {
+      _shooter.setFarShot();
+    } else if (_driverController.getBButton())
+    {
+      _shooter.setTrenchShot();
+    }
+    if (Math.abs(_driverController.getTriggerAxis(Hand.kRight)) > 0.05)
+    {
+      _shooter.goShoot();
+    }
   }
 
   public void teleopDrive()

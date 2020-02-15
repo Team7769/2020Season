@@ -4,31 +4,35 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Configuration.Constants;
 
 public class Shooter implements ISubsystem {
 
-    //private CANSparkMax _leftMotor;
-    //private CANSparkMax _rightMotor;
-    //private CANEncoder _shooterEncoder;
-
+    private CANSparkMax _hoodMotor;
+    private Encoder _hoodEncoder;
     private TalonFX _leftMotor;
     private TalonFX _rightMotor;
 
+    private PIDController _hoodPositionPID;
+
     private static Shooter _instance;
     private double _shooterSpeed;
+    private double _hoodPosition;
 
     public Shooter() {
         _leftMotor = new TalonFX(Constants.kLeftShooterId);
         _rightMotor = new TalonFX(Constants.kRightShooterId);
-        //_leftMotor = new CANSparkMax(Constants.kLeftShooterId, MotorType.kBrushless);
-        //_rightMotor = new CANSparkMax(Constants.kRightShooterId, MotorType.kBrushless);
-
-        //_shooterEncoder = _leftMotor.getEncoder();
+        _hoodMotor = new CANSparkMax(Constants.kHoodId, MotorType.kBrushless);
+        _hoodEncoder = new Encoder(Constants.kHoodEncoderPortA, Constants.kHoodEncoderPortB);
 
 	    /** Config Objects for motor controllers */
 	    TalonFXConfiguration _leftConfig = new TalonFXConfiguration();
@@ -46,7 +50,10 @@ public class Shooter implements ISubsystem {
         _leftMotor.configAllSettings(_leftConfig);
         _rightMotor.configAllSettings(_rightConfig);
 
+        _hoodPositionPID = new PIDController(Constants.kHoodPositionkP, Constants.kHoodPositionkI, Constants.kHoodPositionkD);
+
         _shooterSpeed = 0;
+        _hoodPosition = 0;
         SmartDashboard.putNumber("manualShooterSpeed", 0);
 
     }
@@ -57,6 +64,48 @@ public class Shooter implements ISubsystem {
             _instance = new Shooter();
         }
         return _instance;
+    }
+    public void resetSensors()
+    {
+        _hoodEncoder.reset();
+    }
+    public void goShoot()
+    {
+        setSpeed(_shooterSpeed);
+        setHoodPosition(_hoodPosition);
+    }
+    private void setSpeed(double speed)
+    {
+        _leftMotor.set(TalonFXControlMode.Velocity, speed);
+    }
+    private void setHoodPosition(double position)
+    {
+        if (position != _hoodPositionPID.getSetpoint())
+        {
+            _hoodPositionPID.reset();
+        }
+        var output = _hoodPositionPID.calculate(_hoodEncoder.getDistance(), position);
+        _hoodMotor.set(output);
+    }
+    public void setLineShot()
+    {
+        _shooterSpeed = Constants.kLineShotVelocity;
+        _hoodPosition = Constants.kLineShotHoodPosition;
+    }
+    public void setFarShot()
+    {
+        _shooterSpeed = Constants.kFarShotVelocity;
+        _hoodPosition = Constants.kFarShotHoodPosition;
+    }
+    public void setPopShot()
+    {
+        _shooterSpeed = Constants.kPopShotVelocity;
+        _hoodPosition = Constants.kPopShotHoodPosition;
+    }
+    public void setTrenchShot()
+    {
+        _shooterSpeed = Constants.kTrenchShotVelocity;
+        _hoodPosition = Constants.kTrenchShotHoodPosition;
     }
     public void Shoot(double speed){
         //_leftMotor.set(speed);
@@ -72,6 +121,8 @@ public class Shooter implements ISubsystem {
         SmartDashboard.putNumber("shooterRPM", _leftMotor.getSelectedSensorVelocity());
         SmartDashboard.putNumber("shooterInputCurrent", _leftMotor.getSupplyCurrent());
         SmartDashboard.putNumber("shooterOutputCurrent", _leftMotor.getStatorCurrent());
+
+        SmartDashboard.putNumber("hoodPosition", _hoodEncoder.getDistance());
     }
 
     @Override

@@ -15,6 +15,7 @@ public final class Constants {
     public static final int kRightShooterId = 7;
     public static final int kLeftCollectorId = 8;
     public static final int kRightCollectorId = 9;
+    public static final int kHoodId = 10;
 
     //Usb Controllers
     public static final int kDriverUsbSlot = 0;
@@ -29,6 +30,8 @@ public final class Constants {
     public static final int kLeftEncoderPortB = 1;
     public static final int kRightEncoderPortA = 2;
     public static final int kRightEncoderPortB = 3;
+    public static final int kHoodEncoderPortA = 4;
+    public static final int kHoodEncoderPortB = 5;
 
     //Analog
     public static final int kIntakeSensorPort = 0;
@@ -61,7 +64,22 @@ public final class Constants {
     public static final double kTurnkI = 0.0;
     public static final double kTurnkD = 0.0035;
 
+    public static final double kHoodPositionkP = 0.067;
+    public static final double kHoodPositionkI = 0.0;
+    public static final double kHoodPositionkD = 0.0;
+
     public static final double kGoalHeight = 4.26; //feet
+
+    public static final double kPopShotVelocity = 15000;
+    public static final double kLineShotVelocity = 12000;
+    public static final double kTrenchShotVelocity = 16000;
+    public static final double kFarShotVelocity = 23000;
+
+    public static final double kPopShotHoodPosition = 1000;
+    public static final double kLineShotHoodPosition = 1200;
+    public static final double kTrenchShotHoodPosition = 1400;
+    public static final double kFarShotHoodPosition = 2000;
+
     /*
     //Competition Robot Settings
     public static final int kLeftDriveId = 0;
