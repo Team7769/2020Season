@@ -37,6 +37,7 @@ public class Robot extends TimedRobot {
    * used for any initialization code.
    */
   private XboxController _driverController;
+  private XboxController _operatorController;
   private Drivetrain _drivetrain;
   private Shooter _shooter;
   private Collector _collector;
@@ -55,6 +56,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     _driverController = new XboxController(Constants.kDriverUsbSlot);
+    _operatorController = new XboxController(Constants.kOperatorUsbSlot);
     
     _drivetrain = Drivetrain.GetInstance();
     _ledController = LEDController.GetInstance();
@@ -315,16 +317,16 @@ public class Robot extends TimedRobot {
     if (_driverController.getBumper(Hand.kLeft)){
       _shooter.ManualShoot();
     }
-    if (_driverController.getAButton())
+    if (_operatorController.getAButton())
     {
       _shooter.setPopShot();
-    } else if (_driverController.getXButton())
+    } else if (_operatorController.getXButton())
     {
       _shooter.setLineShot();
-    } else if (_driverController.getYButton())
+    } else if (_operatorController.getYButton())
     {
       _shooter.setFarShot();
-    } else if (_driverController.getBButton())
+    } else if (_operatorController.getBButton())
     {
       _shooter.setTrenchShot();
     }
@@ -374,6 +376,18 @@ public class Robot extends TimedRobot {
     _ledController.setLED(_ledValue);
   }
 
+  public void teleopCollect()
+  {
+    if (_operatorController.getBumper(Hand.kLeft))
+    {
+      _collector.succ();
+    } else if (_operatorController.getBumper(Hand.kRight))
+    {
+      _collector.spit();
+    } else {
+      _collector.stop();
+    }
+  }
   /**
    * This function is called periodically during test mode.
    */

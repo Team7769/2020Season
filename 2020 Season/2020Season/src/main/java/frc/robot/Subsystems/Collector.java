@@ -40,6 +40,18 @@ public class Collector implements ISubsystem {
         //_leftMotor.set(_shooterSpeed);
         _rightCollector.set(_collectorSpeed);
     }
+    public void spit()
+    {
+        _rightCollector.set(-_collectorSpeed);
+    }
+    public void succ()
+    {
+        _rightCollector.set(_collectorSpeed);
+    }
+    public void stop()
+    {
+        _rightCollector.set(0);
+    }
     
 
     @Override
