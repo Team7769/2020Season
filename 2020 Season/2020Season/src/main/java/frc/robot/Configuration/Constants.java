@@ -58,7 +58,7 @@ public final class Constants {
     public static final double kTurnkI = 0.0;
     public static final double kTurnkD = 0.0025;
 
-    public static final double kGoalHeight = 4.96; //feet
+    public static final double kGoalHeight = 4.26; //feet
     /*
     //Competition Robot Settings
     public static final int kLeftDriveId = 0;

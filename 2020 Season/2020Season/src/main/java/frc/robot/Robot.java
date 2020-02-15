@@ -95,6 +95,9 @@ public class Robot extends TimedRobot {
     getTargetDistance();
 
     SmartDashboard.putNumber("goalDistance", _goalDistance);
+    SmartDashboard.putNumber("limelightX", _limelight.getAngleToTarget());
+    SmartDashboard.putNumber("limelightY", _limelight.getYAngle());
+    SmartDashboard.putBoolean("limelightValidTarget", _limelight.hasTarget());
   }
 
   @Override
@@ -377,7 +380,7 @@ public class Robot extends TimedRobot {
       return 0;
     }
     var targetYOffset = _limelight.getYAngle();
-    _goalDistance = Constants.kGoalHeight / Math.tan(targetYOffset);
+    _goalDistance = Constants.kGoalHeight / Math.tan(targetYOffset * Math.PI/180);
 
     return _goalDistance;
   }

@@ -28,11 +28,11 @@ public class Limelight {
     }
     public double getAngleToTarget()
     {
-        return _targetX.getDouble(0);
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
     }
     public double getYAngle()
     {
-        return _targetY.getDouble(0);
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
     }
     public boolean hasTarget()
     {
