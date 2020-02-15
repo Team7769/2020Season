@@ -16,6 +16,8 @@ public final class Constants {
     public static final int kLeftCollectorId = 8;
     public static final int kRightCollectorId = 9;
     public static final int kHoodId = 10;
+    public static final int kLeftExtendoId = 11;
+    public static final int kRightExtendoId = 12;
 
     //Usb Controllers
     public static final int kDriverUsbSlot = 0;
@@ -32,6 +34,8 @@ public final class Constants {
     public static final int kRightEncoderPortB = 3;
     public static final int kHoodEncoderPortA = 4;
     public static final int kHoodEncoderPortB = 5;
+    public static final int kExtendoEncoderPortA = 6;
+    public static final int kExtendoEncoderPortB = 7;
 
     //Analog
     public static final int kIntakeSensorPort = 0;

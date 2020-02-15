@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Configuration.Constants;
 import frc.robot.Subsystems.Collector;
 import frc.robot.Subsystems.Drivetrain;
+import frc.robot.Subsystems.Extendo;
 import frc.robot.Subsystems.ISubsystem;
 import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.SpinnyThingy;
@@ -43,6 +44,7 @@ public class Robot extends TimedRobot {
   private Collector _collector;
   private SpinnyThingy _spinnyThingy;
   private Limelight _limelight;
+  private Extendo _extendo;
   private ArrayList<ISubsystem> _subsystems;
 
   private LEDController _ledController;
@@ -64,6 +66,7 @@ public class Robot extends TimedRobot {
     _collector = Collector.GetInstance();
     //_spinnyThingy = SpinnyThingy.GetInstance();
     _limelight = Limelight.GetInstance();
+    //_extendo = Extendo.GetInstance();
 
     _subsystems = new ArrayList<ISubsystem>();
 
@@ -71,6 +74,7 @@ public class Robot extends TimedRobot {
     //_subsystems.add(_shooter);
     _subsystems.add(_collector);
     //_subsystems.add(_spinnyThingy);
+    //_subsystems.add(_extendo);
     _autonomousCase = 0;
     _autonomousLoops = 0;
     _aimLoops = 0;
@@ -311,6 +315,8 @@ public class Robot extends TimedRobot {
     //teleopShoot();
     teleopDrive();
     //teleopLEDs();
+    //teleopCollect();
+    //teleopExtendo();
   }
   public void teleopShoot()
   {
@@ -386,6 +392,12 @@ public class Robot extends TimedRobot {
       _collector.spit();
     } else {
       _collector.stop();
+    }
+  }
+  public void teleopExtendo()
+  {
+    if (_driverController.getYButton()){
+      _extendo.manualExtendo();
     }
   }
   /**
