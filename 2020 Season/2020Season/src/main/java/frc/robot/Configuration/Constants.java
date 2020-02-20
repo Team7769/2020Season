@@ -84,6 +84,8 @@ public final class Constants {
     public static final double kTrenchShotHoodPosition = 1400;
     public static final double kFarShotHoodPosition = 2000;
 
+    public static final double kBallProximity = 1.0;
+
     /*
     //Competition Robot Settings
     public static final int kLeftDriveId = 0;

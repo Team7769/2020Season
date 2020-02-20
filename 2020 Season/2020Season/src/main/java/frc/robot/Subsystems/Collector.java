@@ -5,14 +5,16 @@ import com.revrobotics.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Configuration.Constants;
+import frc.robot.CrewLib.ProximitySensor;
 
 public class Collector implements ISubsystem {
 
     private CANSparkMax _leftCollector;
     private CANSparkMax _rightCollector;
-    private AnalogInput _intakeProximitySensor;
+    private ProximitySensor _intakeProximitySensor;
 
     private static Collector _instance;
     private double _collectorSpeed;
@@ -23,7 +25,7 @@ public class Collector implements ISubsystem {
 
         //_leftCollector.follow(_rightCollector);
 
-        _intakeProximitySensor = new AnalogInput(Constants.kIntakeSensorPort);
+        _intakeProximitySensor = new ProximitySensor(Constants.kIntakeSensorPort);
 
         _collectorSpeed = 0;
         SmartDashboard.putNumber("manualCollectorSpeed", _collectorSpeed);
