@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
   private int _aimLoops;
   private double _ledValue;
   private double _goalDistance;
+  private int _autonomousMode;
 
   @Override
   public void robotInit() {
@@ -79,6 +80,7 @@ public class Robot extends TimedRobot {
     _autonomousLoops = 0;
     _aimLoops = 0;
     _goalDistance = 0;
+    _autonomousMode = 0;
     _ledValue = -0.99;
     SmartDashboard.putNumber("ledValue", _ledValue);
   }
@@ -111,14 +113,13 @@ public class Robot extends TimedRobot {
     if (_driverController.getBackButtonPressed())
     {
       autonomousInit();
-      
     }
+    _autonomousMode = (int) SmartDashboard.getNumber("autonomousMode", 0);
   }
 
   @Override
   public void autonomousInit() {
-    //_drivetrain.setLineToTrenchPath();
-    _drivetrain.setLineToLeftDiamondPath();
+    
     _drivetrain.resetEncoders();
     _drivetrain.resetGyro();
     _drivetrain.updatePose();
@@ -134,10 +135,25 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     SmartDashboard.putNumber("Timestamp", Timer.getMatchTime());
-    diamondFirstTrenchAuto();
-    //trenchAuto();
-    //reverseTrenchTest(timestamp);
-    //turnTestAuto();
+
+    switch (_autonomousMode)
+    {
+      case 0:
+        //Do nothing
+        break;
+      case 1:
+        diamondFirstTrenchAuto();
+        break;
+      case 2:
+        trenchAuto();
+        break;
+      case 3:
+        //stealAuto();
+        break;
+      case 4:
+        //driveForwardAuto();
+        break;
+    }
 
     _autonomousLoops++;
   }
