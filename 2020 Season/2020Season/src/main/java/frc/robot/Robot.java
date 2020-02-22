@@ -393,6 +393,7 @@ public class Robot extends TimedRobot {
     } else {
       _collector.stop();
     }
+    _collector.index();
   }
   public void teleopExtendo()
   {

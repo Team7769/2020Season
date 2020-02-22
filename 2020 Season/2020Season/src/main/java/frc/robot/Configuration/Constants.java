@@ -13,11 +13,13 @@ public final class Constants {
     public static final int kRightRearDriveId = 5;
     public static final int kLeftShooterId = 6;
     public static final int kRightShooterId = 7;
-    public static final int kLeftCollectorId = 8;
-    public static final int kRightCollectorId = 9;
+    public static final int kInnerCollectorId = 8;
+    public static final int kOuterCollectorId = 9;
     public static final int kHoodId = 10;
     public static final int kLeftExtendoId = 11;
     public static final int kRightExtendoId = 12;
+    public static final int kFrontConveyorId = 13;
+    public static final int kBackConveyorId = 14;
 
     //Usb Controllers
     public static final int kDriverUsbSlot = 0;
@@ -39,6 +41,15 @@ public final class Constants {
 
     //Analog
     public static final int kIntakeSensorPort = 0;
+    public static final int kIndexSensorPort = 1;
+    public static final int kOutIndexSensorPort = 2;
+
+    //Solenoids
+    public static final int kCollectorChannelForward = 0;
+    public static final int kCollectorChannelReverse = 1;
+    public static final int kLeftShooterChannel = 2;
+    public static final int kRightShooterChannel = 3;
+    public static final int kConveyorChannel = 4;
 
     public static final int kDriveEncoderTicksPerRevolution = 2048;
     public static final double kDriveWheelDiameter = 0.15;
