@@ -367,7 +367,10 @@ public class Robot extends TimedRobot {
     double augmentTurn = 0;
     if (_driverController.getBumper(Hand.kRight))
     {
+      _limelight.setAimbot();
       augmentTurn = _drivetrain.followTarget();
+    } else {
+      _limelight.setDashcam();
     }
     double throttle = -_driverController.getY(Hand.kLeft);
     double turn = _driverController.getX(Hand.kRight);
@@ -375,8 +378,10 @@ public class Robot extends TimedRobot {
     _drivetrain.FunnyDrive(throttle, turn - augmentTurn);
     if (_drivetrain.isTurnFinished())
       {
+        SmartDashboard.putBoolean("lockedOn", true);
         _ledController.setOnTargetState();
       } else {
+        SmartDashboard.putBoolean("lockedOn", false);
         _ledController.setTrackingTargetState();
       }
    

@@ -31,6 +31,7 @@ public class Shooter implements ISubsystem {
     private static Shooter _instance;
     private double _shooterSpeed;
     private double _hoodPosition;
+    private String _currentShot;
 
     public Shooter() {
         _leftMotor = new TalonFX(Constants.kLeftShooterId);
@@ -97,21 +98,25 @@ public class Shooter implements ISubsystem {
     {
         _shooterSpeed = Constants.kLineShotVelocity;
         _hoodPosition = Constants.kLineShotHoodPosition;
+        _currentShot = "Line Shot";
     }
     public void setFarShot()
     {
         _shooterSpeed = Constants.kFarShotVelocity;
         _hoodPosition = Constants.kFarShotHoodPosition;
+        _currentShot = "Far Shot";
     }
     public void setPopShot()
     {
         _shooterSpeed = Constants.kPopShotVelocity;
         _hoodPosition = Constants.kPopShotHoodPosition;
+        _currentShot = "Pop Shot";
     }
     public void setTrenchShot()
     {
         _shooterSpeed = Constants.kTrenchShotVelocity;
         _hoodPosition = Constants.kTrenchShotHoodPosition;
+        _currentShot = "Trench Shot";
     }
     public void Shoot(double speed){
         //_leftMotor.set(speed);
@@ -149,6 +154,7 @@ public class Shooter implements ISubsystem {
         SmartDashboard.putBoolean("rightCoolerEngaged", _rightCooler.get());
 
         SmartDashboard.putNumber("hoodPosition", _hoodEncoder.getDistance());
+        SmartDashboard.putString("currentShot", _currentShot);
     }
 
     @Override
