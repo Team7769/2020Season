@@ -47,9 +47,11 @@ public final class Constants {
     //Solenoids
     public static final int kCollectorChannelForward = 0;
     public static final int kCollectorChannelReverse = 1;
-    public static final int kLeftShooterChannel = 2;
-    public static final int kRightShooterChannel = 3;
-    public static final int kConveyorChannel = 4;
+    public static final int kExtendoLockChannelForward = 2;
+    public static final int kExtendoLockChannelReverse = 3;
+    public static final int kLeftShooterChannel = 4;
+    public static final int kRightShooterChannel = 5;
+    public static final int kConveyorChannel = 6;
 
     public static final int kDriveEncoderTicksPerRevolution = 2048;
     public static final double kDriveWheelDiameter = 0.15;
