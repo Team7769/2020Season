@@ -18,6 +18,7 @@ public class Collector implements ISubsystem {
     private CANSparkMax _frontConveyor;
     private CANSparkMax _backConveyor;
     private DoubleSolenoid _collectorSolenoid;
+    private Solenoid _ballStop;
     private ProximitySensor _intakeProximitySensor;
     private ProximitySensor _indexSensor;
     private ProximitySensor _outIndexSensor;
@@ -41,6 +42,7 @@ public class Collector implements ISubsystem {
         _indexSensor = new ProximitySensor(Constants.kIndexSensorPort);
         _outIndexSensor = new ProximitySensor(Constants.kOutIndexSensorPort);
         _collectorSolenoid = new DoubleSolenoid(Constants.kCollectorChannelForward, Constants.kCollectorChannelReverse);
+        _ballStop = new Solenoid(Constants.kConveyorChannel);
 
         _backConveyor.follow(_frontConveyor);
 
@@ -91,6 +93,7 @@ public class Collector implements ISubsystem {
     }
     public void index()
     {
+        _ballStop.set(true);
         if (_intakeProximitySensor.isBlocked())
         {
             _frontConveyor.set(_conveyorSpeed);
@@ -110,6 +113,7 @@ public class Collector implements ISubsystem {
     }
     public void feed()
     {
+        _ballStop.set(false);
         _frontConveyor.set(_conveyorSpeed);
         _indexing = false;
 
@@ -123,6 +127,7 @@ public class Collector implements ISubsystem {
         }
     }
     public void stopFeed() {
+        _ballStop.set(true);
         if (!_indexing)
         {
             _frontConveyor.set(0);
@@ -140,6 +145,7 @@ public class Collector implements ISubsystem {
         //SmartDashboard.putNumber("collectorRPM", _rightCollector.getOpenLoopRampRate());
         SmartDashboard.putNumber("intakeSensor", _intakeProximitySensor.getVoltage());
         SmartDashboard.putNumber("ballCount", _ballCount);
+        SmartDashboard.putBoolean("ballStop", _ballStop.get());
         
         switch (_collectorSolenoid.get())
         {

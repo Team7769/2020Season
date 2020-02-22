@@ -338,8 +338,12 @@ public class Robot extends TimedRobot {
     }
     if (Math.abs(_driverController.getTriggerAxis(Hand.kRight)) > 0.05)
     {
+      _collector.feed();
       _shooter.goShoot();
+    } else {
+      _collector.stopFeed();
     }
+    _shooter.monitorTemperature();
   }
 
   public void teleopDrive()

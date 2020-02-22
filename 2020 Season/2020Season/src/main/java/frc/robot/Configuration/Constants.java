@@ -98,6 +98,8 @@ public final class Constants {
     public static final double kFarShotHoodPosition = 2000;
 
     public static final double kBallProximity = 1.0;
+    
+    public static final double kMotorTemperatureThreshold = 32; //Degrees Celsius
 
     /*
     //Competition Robot Settings

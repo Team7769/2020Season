@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Configuration.Constants;
@@ -21,6 +22,9 @@ public class Shooter implements ISubsystem {
     private Encoder _hoodEncoder;
     private TalonFX _leftMotor;
     private TalonFX _rightMotor;
+
+    private Solenoid _leftCooler;
+    private Solenoid _rightCooler;
 
     private PIDController _hoodPositionPID;
 
@@ -33,6 +37,8 @@ public class Shooter implements ISubsystem {
         _rightMotor = new TalonFX(Constants.kRightShooterId);
         _hoodMotor = new CANSparkMax(Constants.kHoodId, MotorType.kBrushless);
         _hoodEncoder = new Encoder(Constants.kHoodEncoderPortA, Constants.kHoodEncoderPortB);
+        _leftCooler = new Solenoid(Constants.kLeftShooterChannel);
+        _rightCooler = new Solenoid(Constants.kRightShooterChannel);
 
 	    /** Config Objects for motor controllers */
 	    TalonFXConfiguration _leftConfig = new TalonFXConfiguration();
@@ -115,12 +121,32 @@ public class Shooter implements ISubsystem {
         //_leftMotor.set(_shooterSpeed);
         _leftMotor.set(ControlMode.PercentOutput, _shooterSpeed);
     }
+    public void monitorTemperature()
+    {
+        if (_leftMotor.getTemperature() >= Constants.kMotorTemperatureThreshold)
+        {
+            _leftCooler.set(true);
+        } else {
+            _leftCooler.set(false);
+        }
+        if (_rightMotor.getTemperature() >= Constants.kMotorTemperatureThreshold)
+        {
+            _rightCooler.set(true);
+        } else {
+            _rightCooler.set(false);
+        }
+    }
 
     @Override
     public void LogTelemetry() {
         SmartDashboard.putNumber("shooterRPM", _leftMotor.getSelectedSensorVelocity());
         SmartDashboard.putNumber("shooterInputCurrent", _leftMotor.getSupplyCurrent());
         SmartDashboard.putNumber("shooterOutputCurrent", _leftMotor.getStatorCurrent());
+
+        SmartDashboard.putNumber("leftShooterTemperature", _leftMotor.getTemperature());
+        SmartDashboard.putNumber("rightShooterTemperature", _rightMotor.getTemperature());
+        SmartDashboard.putBoolean("leftCoolerEngaged", _leftCooler.get());
+        SmartDashboard.putBoolean("rightCoolerEngaged", _rightCooler.get());
 
         SmartDashboard.putNumber("hoodPosition", _hoodEncoder.getDistance());
     }
