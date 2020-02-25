@@ -81,7 +81,7 @@ public final class Constants {
     public static final double kTurnkI = 0.0;
     public static final double kTurnkD = 0.0035;
 
-    public static final double kHoodPositionkP = 0.067;
+    public static final double kHoodPositionkP = 0.25;
     public static final double kHoodPositionkI = 0.0;
     public static final double kHoodPositionkD = 0.0;
 
@@ -92,10 +92,10 @@ public final class Constants {
     public static final double kTrenchShotVelocity = 16000;
     public static final double kFarShotVelocity = 23000;
 
-    public static final double kPopShotHoodPosition = 1000;
-    public static final double kLineShotHoodPosition = 1200;
-    public static final double kTrenchShotHoodPosition = 1400;
-    public static final double kFarShotHoodPosition = 2000;
+    public static final double kPopShotHoodPosition = -.3;
+    public static final double kLineShotHoodPosition = -.5;
+    public static final double kTrenchShotHoodPosition = -.8;
+    public static final double kFarShotHoodPosition = -1.0;
 
     public static final double kBallProximity = 1.0;
     

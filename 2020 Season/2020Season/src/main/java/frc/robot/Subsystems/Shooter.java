@@ -10,8 +10,13 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.DigitalSource;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Counter.Mode;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Configuration.Constants;
@@ -19,7 +24,7 @@ import frc.robot.Configuration.Constants;
 public class Shooter implements ISubsystem {
 
     private CANSparkMax _hoodMotor;
-    private Encoder _hoodEncoder;
+    private DutyCycleEncoder _hoodEncoder;
     private TalonFX _leftMotor;
     private TalonFX _rightMotor;
 
@@ -27,6 +32,7 @@ public class Shooter implements ISubsystem {
     private Solenoid _rightCooler;
 
     private PIDController _hoodPositionPID;
+
 
     private static Shooter _instance;
     private double _shooterSpeed;
@@ -37,9 +43,13 @@ public class Shooter implements ISubsystem {
         _leftMotor = new TalonFX(Constants.kLeftShooterId);
         _rightMotor = new TalonFX(Constants.kRightShooterId);
         _hoodMotor = new CANSparkMax(Constants.kHoodId, MotorType.kBrushless);
-        _hoodEncoder = new Encoder(Constants.kHoodEncoderPortA, Constants.kHoodEncoderPortB);
-        _leftCooler = new Solenoid(Constants.kLeftShooterChannel);
-        _rightCooler = new Solenoid(Constants.kRightShooterChannel);
+        //_hoodMotor.setInverted(true);
+        _hoodEncoder = new DutyCycleEncoder(Constants.kHoodEncoderPortA);
+        //_hoodEncoder.reset();
+        
+        
+        //_leftCooler = new Solenoid(Constants.kLeftShooterChannel);
+        //_rightCooler = new Solenoid(Constants.kRightShooterChannel);
 
 	    /** Config Objects for motor controllers */
 	    TalonFXConfiguration _leftConfig = new TalonFXConfiguration();
@@ -61,6 +71,7 @@ public class Shooter implements ISubsystem {
 
         _shooterSpeed = 0;
         _hoodPosition = 0;
+        _currentShot = "None";
         SmartDashboard.putNumber("manualShooterSpeed", 0);
 
     }
@@ -78,8 +89,8 @@ public class Shooter implements ISubsystem {
     }
     public void goShoot()
     {
-        setSpeed(_shooterSpeed);
-        setHoodPosition(_hoodPosition);
+        //setSpeed(_shooterSpeed);
+        //setHoodPosition(_hoodPosition);
     }
     private void setSpeed(double speed)
     {
@@ -92,6 +103,17 @@ public class Shooter implements ISubsystem {
             _hoodPositionPID.reset();
         }
         var output = _hoodPositionPID.calculate(_hoodEncoder.getDistance(), position);
+        if (Math.abs(output) >= 0.25)
+        {
+            if (output > 0)
+            {
+                output = .25;
+            } else {
+                output = -.25;
+            }
+        }
+        SmartDashboard.putNumber("hoodOutput", output);
+
         _hoodMotor.set(output);
     }
     public void setLineShot()
@@ -118,6 +140,10 @@ public class Shooter implements ISubsystem {
         _hoodPosition = Constants.kTrenchShotHoodPosition;
         _currentShot = "Trench Shot";
     }
+    public void moveHood(double speed)
+    {
+        _hoodMotor.set(speed);
+    }
     public void Shoot(double speed){
         //_leftMotor.set(speed);
         _leftMotor.set(ControlMode.PercentOutput, speed);
@@ -125,6 +151,9 @@ public class Shooter implements ISubsystem {
     public void ManualShoot(){
         //_leftMotor.set(_shooterSpeed);
         _leftMotor.set(ControlMode.PercentOutput, _shooterSpeed);
+    }
+    public void stopHood(){
+        _hoodMotor.set(0);
     }
     public void monitorTemperature()
     {
@@ -150,10 +179,13 @@ public class Shooter implements ISubsystem {
 
         SmartDashboard.putNumber("leftShooterTemperature", _leftMotor.getTemperature());
         SmartDashboard.putNumber("rightShooterTemperature", _rightMotor.getTemperature());
-        SmartDashboard.putBoolean("leftCoolerEngaged", _leftCooler.get());
-        SmartDashboard.putBoolean("rightCoolerEngaged", _rightCooler.get());
+        //SmartDashboard.putBoolean("leftCoolerEngaged", _leftCooler.get());
+        //SmartDashboard.putBoolean("rightCoolerEngaged", _rightCooler.get());
+        SmartDashboard.putNumber("hoodPower", _hoodMotor.get());
 
         SmartDashboard.putNumber("hoodPosition", _hoodEncoder.getDistance());
+        SmartDashboard.putNumber("hoodOffset", _hoodEncoder.getPositionOffset());
+        SmartDashboard.putNumber("hoodFrequency", _hoodEncoder.getFrequency());
         SmartDashboard.putString("currentShot", _currentShot);
     }
 

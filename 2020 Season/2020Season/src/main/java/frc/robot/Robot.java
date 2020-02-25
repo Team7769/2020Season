@@ -63,8 +63,8 @@ public class Robot extends TimedRobot {
     
     _drivetrain = Drivetrain.GetInstance();
     _ledController = LEDController.GetInstance();
-    //_shooter = Shooter.GetInstance();
-    _collector = Collector.GetInstance();
+    _shooter = Shooter.GetInstance();
+    //_collector = Collector.GetInstance();
     //_spinnyThingy = SpinnyThingy.GetInstance();
     _limelight = Limelight.GetInstance();
     //_extendo = Extendo.GetInstance();
@@ -72,8 +72,8 @@ public class Robot extends TimedRobot {
     _subsystems = new ArrayList<ISubsystem>();
 
     _subsystems.add(_drivetrain);
-    //_subsystems.add(_shooter);
-    _subsystems.add(_collector);
+    _subsystems.add(_shooter);
+    //_subsystems.add(_collector);
     //_subsystems.add(_spinnyThingy);
     //_subsystems.add(_extendo);
     _autonomousCase = 0;
@@ -328,7 +328,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    //teleopShoot();
+    teleopShoot();
     teleopDrive();
     //teleopLEDs();
     //teleopCollect();
@@ -354,12 +354,21 @@ public class Robot extends TimedRobot {
     }
     if (Math.abs(_driverController.getTriggerAxis(Hand.kRight)) > 0.05)
     {
-      _collector.feed();
+      //_collector.feed();
       _shooter.goShoot();
-    } else {
-      _collector.stopFeed();
     }
-    _shooter.monitorTemperature();
+    if (_operatorController.getBumper(Hand.kLeft))
+    {
+      _shooter.moveHood(-.25);
+    } else if (_operatorController.getBumper(Hand.kRight))
+    {
+      _shooter.moveHood(.25);
+    }
+    else {
+      _shooter.stopHood();
+      //_collector.stopFeed();
+    }
+    //_shooter.monitorTemperature();
   }
 
   public void teleopDrive()
