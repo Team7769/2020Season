@@ -9,8 +9,12 @@ public class Limelight {
     private NetworkTableEntry _targetY;
     private NetworkTableEntry _validTargets;
     private NetworkTableEntry _camMode;
+    private NetworkTableEntry _ledMode;
 
     private static Limelight _instance;
+
+    private static final int kLEDOff = 1;
+    private static final int kLEDOn = 3;
 
     public Limelight()
     {
@@ -18,6 +22,8 @@ public class Limelight {
         _targetY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty");
         _validTargets = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv");
         _camMode = NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode");
+        _ledMode = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode");
+
 
     }
     public static Limelight GetInstance()
@@ -46,10 +52,12 @@ public class Limelight {
     }
     public void setDashcam()
     {
+        _ledMode.setDouble(kLEDOff);
         _camMode.setDouble(1);
     }
     public void setAimbot()
     {
+        _ledMode.setDouble(kLEDOn);
         _camMode.setDouble(0);
     }
 }

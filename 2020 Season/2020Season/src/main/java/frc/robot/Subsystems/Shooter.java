@@ -90,7 +90,7 @@ public class Shooter implements ISubsystem {
     public void goShoot()
     {
         //setSpeed(_shooterSpeed);
-        //setHoodPosition(_hoodPosition);
+        setHoodPosition(_hoodPosition);
     }
     private void setSpeed(double speed)
     {
@@ -102,7 +102,7 @@ public class Shooter implements ISubsystem {
         {
             _hoodPositionPID.reset();
         }
-        var output = _hoodPositionPID.calculate(_hoodEncoder.getDistance(), position);
+        var output = _hoodPositionPID.calculate(_hoodEncoder.get(), position);
         if (Math.abs(output) >= 0.25)
         {
             if (output > 0)
@@ -173,17 +173,17 @@ public class Shooter implements ISubsystem {
 
     @Override
     public void LogTelemetry() {
-        SmartDashboard.putNumber("shooterRPM", _leftMotor.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("shooterInputCurrent", _leftMotor.getSupplyCurrent());
-        SmartDashboard.putNumber("shooterOutputCurrent", _leftMotor.getStatorCurrent());
+        //SmartDashboard.putNumber("shooterRPM", _leftMotor.getSelectedSensorVelocity());
+        //SmartDashboard.putNumber("shooterInputCurrent", _leftMotor.getSupplyCurrent());
+        //SmartDashboard.putNumber("shooterOutputCurrent", _leftMotor.getStatorCurrent());
 
-        SmartDashboard.putNumber("leftShooterTemperature", _leftMotor.getTemperature());
-        SmartDashboard.putNumber("rightShooterTemperature", _rightMotor.getTemperature());
+        //SmartDashboard.putNumber("leftShooterTemperature", _leftMotor.getTemperature());
+        //SmartDashboard.putNumber("rightShooterTemperature", _rightMotor.getTemperature());
         //SmartDashboard.putBoolean("leftCoolerEngaged", _leftCooler.get());
         //SmartDashboard.putBoolean("rightCoolerEngaged", _rightCooler.get());
         SmartDashboard.putNumber("hoodPower", _hoodMotor.get());
 
-        SmartDashboard.putNumber("hoodPosition", _hoodEncoder.getDistance());
+        SmartDashboard.putNumber("hoodPosition", _hoodEncoder.get());
         SmartDashboard.putNumber("hoodOffset", _hoodEncoder.getPositionOffset());
         SmartDashboard.putNumber("hoodFrequency", _hoodEncoder.getFrequency());
         SmartDashboard.putString("currentShot", _currentShot);

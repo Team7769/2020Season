@@ -337,7 +337,7 @@ public class Robot extends TimedRobot {
   public void teleopShoot()
   {
     if (_driverController.getBumper(Hand.kLeft)){
-      _shooter.ManualShoot();
+      //_shooter.ManualShoot();
     }
     if (_operatorController.getAButton())
     {
@@ -356,8 +356,7 @@ public class Robot extends TimedRobot {
     {
       //_collector.feed();
       _shooter.goShoot();
-    }
-    if (_operatorController.getBumper(Hand.kLeft))
+    } else if (_operatorController.getBumper(Hand.kLeft))
     {
       _shooter.moveHood(-.25);
     } else if (_operatorController.getBumper(Hand.kRight))
