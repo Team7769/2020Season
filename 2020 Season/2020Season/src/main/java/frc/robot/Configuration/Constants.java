@@ -72,7 +72,41 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 2;
     public static final double kMaxAccelerationMetersPerSecondSquared = 2;
 
+    //Path Following
     public static final double kPathFollowingkP = 4.5;
+
+    //Starting Point- Center Line
+    public static final int kCenterGoalLineX = 0;
+    public static final int kCenterGoalLineY = 0;
+    public static final int kCenterGoalLineStartAngle = 0;
+    //Trench Path Points
+    public static final double kTrenchPathMidpointX = 2.2;
+    public static final double kTrenchPathMidpointY = 1.40;
+    public static final double kTrenchPathEndX = 5.1;
+    public static final double kTrenchPathEndY = 1.50;
+    public static final double kTrenchPathEndAngle = 0.0;
+
+    //To-the-Rendevous(from the left)
+    public static final double kLeftDiamondPathMidpointX = 1.6;
+    public static final double kLeftDiamondPathMidpointY = 0.6;
+    public static final double kLeftDiamondPathEndX = 2.75;
+    public static final double kLeftDiamondPathEndY = -0.4;
+    public static final double kLeftDiamondPathEndAngle = -60;
+
+    //To-the-Trench(from the rendevous)
+    public static final double kLeftDiamondTrenchPathMidpointX = 2.358;
+    public static final double kLeftDiamondTrenchPathMidpointY = 0.778;
+    public static final double kLeftDiamondTrenchPathEndX = 1.29;
+    public static final double kLeftDiamondTrenchPathEndY = 1.5;
+    public static final int kLeftDiamondTrenchPathEndAngle = 0;
+    
+    //Line Up
+    public static final double kAfterLeftDiamondPathMidpointX = 3.25;
+    public static final double kAfterLeftDiamondPathMidpointY = 1.5;
+    public static final double kAfterLeftDiamondPathEndX = 5.1;
+    public static final double kAfterLeftDiamondPathEndY = 1.5;
+    public static final int kAfterLeftDiamondPathEndAngle = 0;
+
 
     public static final double kTurnkP = 0.067;
     public static final double kTurnkI = 0.0;
