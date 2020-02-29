@@ -110,73 +110,73 @@ public class PathFollower {
       }
       private Trajectory getLineToTrenchTrajectory(TrajectoryConfig config) {
 
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(Constants.kCenterGoalLineX, Constants.kCenterGoalLineY, new Rotation2d(Constants.kCenterGoalLineStartAngle)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(2.2, 1.4)
+            new Translation2d(Constants.kTrenchPathMidpointX,Constants.kTrenchPathMidpointY)
         ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(5.1, 1.50, new Rotation2d(0)),
+        new Pose2d(Constants.kTrenchPathEndX, Constants.kTrenchPathEndY, new Rotation2d(Constants.kTrenchPathEndAngle)),
         // Pass config
         config);
       }
       private Trajectory getTrenchToLineTrajectory(TrajectoryConfig config)
       {
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(5.1, 1.50, new Rotation2d(0)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(Constants.kTrenchPathEndX,Constants.kTrenchPathEndY, new Rotation2d(Constants.kTrenchPathEndAngle)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(2.2, 1.40)
+            new Translation2d(Constants.kTrenchPathMidpointX, Constants.kTrenchPathMidpointY)
         ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(0, 0, new Rotation2d(0)),
+        new Pose2d(Constants.kCenterGoalLineX, Constants.kCenterGoalLineY, new Rotation2d(Constants.kCenterGoalLineStartAngle)),
         // Pass config
         config);
       }
       private Trajectory getLineToLeftDiamondTrajectory(TrajectoryConfig config) {
 
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(Constants.kCenterGoalLineX, Constants.kCenterGoalLineY, new Rotation2d(Constants.kCenterGoalLineStartAngle)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(1.15, 0.0)
+            new Translation2d(Constants.kLeftDiamondPathMidpointX, Constants.kLeftDiamondPathMidpointY)
         ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(2.4, -0.25, Rotation2d.fromDegrees(-55)),
+        new Pose2d(Constants.kLeftDiamondPathEndX, Constants.kLeftDiamondPathEndY, Rotation2d.fromDegrees(Constants.kLeftDiamondPathEndAngle)),
         // Pass config
         config);
       }
       private Trajectory getLeftDiamondToLineTrajectory(TrajectoryConfig config)
       {
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(2.4, -0.25, Rotation2d.fromDegrees(-55)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(Constants.kLeftDiamondPathEndX, Constants.kLeftDiamondPathEndY, Rotation2d.fromDegrees(Constants.kLeftDiamondPathEndAngle)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(1.6, 0.6)
+            new Translation2d(Constants.kLeftDiamondPathMidpointX, Constants.kLeftDiamondPathMidpointY)
         ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(0, 0, new Rotation2d(0)),
+        new Pose2d(Constants.kCenterGoalLineX, Constants.kCenterGoalLineY, new Rotation2d(Constants.kCenterGoalLineStartAngle)),
         // Pass config
         config);
       }
       private Trajectory getLeftDiamondToTrenchTrajectory(TrajectoryConfig config)
       {
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(2.75, -0.4, Rotation2d.fromDegrees(-60)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(Constants.kLeftDiamondPathEndX, Constants.kLeftDiamondPathEndY, Rotation2d.fromDegrees(Constants.kLeftDiamondPathEndAngle)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(2.358, 0.778)
+            new Translation2d(Constants.kLeftDiamondTrenchPathMidpointX, Constants.kLeftDiamondTrenchPathMidpointY)
         ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(1.29, 1.5, new Rotation2d(0)),
+        new Pose2d(Constants.kLeftDiamondTrenchPathEndX, Constants.kLeftDiamondTrenchPathEndY, new Rotation2d(Constants.kLeftDiamondTrenchPathEndAngle)),
         // Pass config
         config);
       }
       private Trajectory getAfterLeftDiamondToTrenchTrajectory(TrajectoryConfig config)
       {
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(1.29, 1.5, new Rotation2d(0)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(Constants.kLeftDiamondTrenchPathEndX, Constants.kLeftDiamondTrenchPathEndY, new Rotation2d(Constants.kLeftDiamondTrenchPathEndAngle)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(3.25, 1.5)
+            new Translation2d(Constants.kAfterLeftDiamondPathMidpointX, Constants.kAfterLeftDiamondPathMidpointY)
         ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(5.1, 1.5, new Rotation2d(0)),
+        new Pose2d(Constants.kAfterLeftDiamondPathEndX, Constants.kAfterLeftDiamondPathEndY, new Rotation2d(Constants.kAfterLeftDiamondPathEndAngle)),
         // Pass config
         config);
       }
