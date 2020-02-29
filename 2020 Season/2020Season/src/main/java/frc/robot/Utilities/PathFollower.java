@@ -57,6 +57,14 @@ public class PathFollower {
     {
         _currentPath = getAfterLeftDiamondToTrenchTrajectory(config);
     }
+    public void setLineToStealPath(TrajectoryConfig config)
+    {
+        _currentPath = getLineToStealTrajectory(config);
+    }
+    public void setStealToGoalPath(TrajectoryConfig config)
+    {
+        _currentPath = getStealToGoalTrajectory(config);
+    }
     public Trajectory getCurrentTrajectory()
     {
         return _currentPath;
@@ -129,16 +137,16 @@ public class PathFollower {
         return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
-            new Translation2d(1.6, 0.6)
+            new Translation2d(1.15, 0.0)
         ),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(2.75, -0.4, Rotation2d.fromDegrees(-60)),
+        new Pose2d(2.4, -0.25, Rotation2d.fromDegrees(-55)),
         // Pass config
         config);
       }
       private Trajectory getLeftDiamondToLineTrajectory(TrajectoryConfig config)
       {
-        return TrajectoryGenerator.generateTrajectory(new Pose2d(2.75, -0.4, Rotation2d.fromDegrees(-45)),
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(2.4, -0.25, Rotation2d.fromDegrees(-55)),
         // Pass through these two interior waypoints, making an 's' curve path
         List.of(
             new Translation2d(1.6, 0.6)
@@ -169,6 +177,30 @@ public class PathFollower {
         ),
         // End 3 meters straight ahead of where we started, facing forward
         new Pose2d(5.1, 1.5, new Rotation2d(0)),
+        // Pass config
+        config);
+      }
+      private Trajectory getLineToStealTrajectory(TrajectoryConfig config) {
+
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)),
+        // Pass through these two interior waypoints, making an 's' curve path
+        List.of(
+            new Translation2d(1.68, 0.0)
+        ),
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(2.65, 0.0, new Rotation2d(0)),
+        // Pass config
+        config);
+      }
+      private Trajectory getStealToGoalTrajectory(TrajectoryConfig config) {
+
+        return TrajectoryGenerator.generateTrajectory(new Pose2d(2.65, 0, new Rotation2d(0)),
+        // Pass through these two interior waypoints, making an 's' curve path
+        List.of(
+            new Translation2d(0.82, 1.04)
+        ),
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(0.52, 5.0, Rotation2d.fromDegrees(-90)),
         // Pass config
         config);
       }

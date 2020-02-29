@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
     
     _drivetrain = Drivetrain.GetInstance();
     _ledController = LEDController.GetInstance();
-    _shooter = Shooter.GetInstance();
+    //_shooter = Shooter.GetInstance();
     //_collector = Collector.GetInstance();
     //_spinnyThingy = SpinnyThingy.GetInstance();
     _limelight = Limelight.GetInstance();
@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     _subsystems = new ArrayList<ISubsystem>();
 
     _subsystems.add(_drivetrain);
-    _subsystems.add(_shooter);
+    //_subsystems.add(_shooter);
     //_subsystems.add(_collector);
     //_subsystems.add(_spinnyThingy);
     //_subsystems.add(_extendo);
@@ -148,7 +148,7 @@ public class Robot extends TimedRobot {
         trenchAuto();
         break;
       case 3:
-        //stealAuto();
+        stealAuto();
         break;
       case 4:
         //driveForwardAuto();
@@ -156,6 +156,70 @@ public class Robot extends TimedRobot {
     }
 
     _autonomousLoops++;
+  }
+  public void stealAuto()
+  {
+    switch (_autonomousCase) {
+      case 0:
+        //Start path from the line to the enemy trench
+        _drivetrain.setLineToStealPath();
+        _drivetrain.startPath();
+        //_shooter.setLineShot();
+        //_collector.index();
+        _autonomousCase++;
+        break;
+      case 1:
+        //End after picking up the trench balls. Start path to the goal.
+        _drivetrain.followPath();
+        //_collector.succ();
+        //_collector.index();
+        if (_drivetrain.isPathFinished())
+        {
+          _drivetrain.setStealToGoalPath();
+          _autonomousLoops = 0;
+          _autonomousCase++;
+        }
+        break;
+      case 2:
+        //Stop and wait X amount of time before continuing
+        _drivetrain.tankDriveVolts(0, 0);
+        //_collector.index();
+        if (_autonomousLoops > 0) {
+          _autonomousLoops = 0;
+          _drivetrain.startPath();
+          _autonomousCase++;
+        }
+        break;
+      case 3:
+        //Drive path to the goal.
+        _drivetrain.followPath();
+        //_collector.index();
+        if (_drivetrain.isPathFinished())
+        {
+          _autonomousCase++;
+        }
+        break;
+      case 4:
+        //Turn to the goal.
+        //_shooter.readyShot();
+        //_collector.index();
+        if (turnToAngle(0))
+        {
+          _autonomousCase++;
+        } else {
+          _aimLoops = 0;
+        }
+        break;
+      case 5:
+        //_shooter.readyShot();
+        //if(_shooter.goShoot()){
+        //  _collector.feed();
+        //} else {
+        //  _collector.stopFeed();
+        //}
+        _drivetrain.FunnyDrive(0, 0);
+        break;
+    }
   }
   public void diamondFirstTrenchAuto()
   {
@@ -328,7 +392,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    teleopShoot();
+    //teleopShoot();
     teleopDrive();
     //teleopLEDs();
     //teleopCollect();
@@ -354,9 +418,16 @@ public class Robot extends TimedRobot {
     }
     if (Math.abs(_driverController.getTriggerAxis(Hand.kRight)) > 0.05)
     {
-      //_collector.feed();
-      _shooter.goShoot();
-    } else if (_operatorController.getBumper(Hand.kLeft))
+      if (_shooter.goShoot())
+      {
+        //_collector.feed();
+      }
+    } 
+    if (Math.abs(_driverController.getTriggerAxis(Hand.kLeft)) > 0.05)
+    {
+      _shooter.readyShot();
+    }
+    if (_operatorController.getBumper(Hand.kLeft))
     {
       _shooter.moveHood(-.25);
     } else if (_operatorController.getBumper(Hand.kRight))
@@ -373,7 +444,7 @@ public class Robot extends TimedRobot {
   public void teleopDrive()
   {
     double augmentTurn = 0;
-    if (_driverController.getBumper(Hand.kRight))
+    if (Math.abs(_driverController.getTriggerAxis(Hand.kLeft)) > 0.05)
     {
       _limelight.setAimbot();
       augmentTurn = _drivetrain.followTarget();

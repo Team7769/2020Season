@@ -40,8 +40,8 @@ public class Shooter implements ISubsystem {
     private String _currentShot;
 
     public Shooter() {
-        _leftMotor = new TalonFX(Constants.kLeftShooterId);
-        _rightMotor = new TalonFX(Constants.kRightShooterId);
+        //_leftMotor = new TalonFX(Constants.kLeftShooterId);
+        //_rightMotor = new TalonFX(Constants.kRightShooterId);
         _hoodMotor = new CANSparkMax(Constants.kHoodId, MotorType.kBrushless);
         //_hoodMotor.setInverted(true);
         _hoodEncoder = new DutyCycleEncoder(Constants.kHoodEncoderPortA);
@@ -55,19 +55,20 @@ public class Shooter implements ISubsystem {
 	    TalonFXConfiguration _leftConfig = new TalonFXConfiguration();
         TalonFXConfiguration _rightConfig = new TalonFXConfiguration();
         
-        _leftConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor; //Local Feedback Source
+        //_leftConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor; //Local Feedback Source
 
 		/* Configure the Remote (Left) Talon's selected sensor as a remote sensor for the right Talon */
-		_rightConfig.remoteFilter0.remoteSensorDeviceID = _leftMotor.getDeviceID(); //Device ID of Remote Source
-		_rightConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.TalonFX_SelectedSensor; //Remote Source Type
+		//_rightConfig.remoteFilter0.remoteSensorDeviceID = _leftMotor.getDeviceID(); //Device ID of Remote Source
+		//_rightConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.TalonFX_SelectedSensor; //Remote Source Type
 
-        _leftMotor.setInverted(true);
-        _rightMotor.follow(_leftMotor, FollowerType.PercentOutput);
+        //_leftMotor.setInverted(true);
+        //_rightMotor.follow(_leftMotor, FollowerType.PercentOutput);
 
-        _leftMotor.configAllSettings(_leftConfig);
-        _rightMotor.configAllSettings(_rightConfig);
+        //_leftMotor.configAllSettings(_leftConfig);
+        //_rightMotor.configAllSettings(_rightConfig);
 
         _hoodPositionPID = new PIDController(Constants.kHoodPositionkP, Constants.kHoodPositionkI, Constants.kHoodPositionkD);
+        _hoodPositionPID.setTolerance(0.05);
 
         _shooterSpeed = 0;
         _hoodPosition = 0;
@@ -87,10 +88,16 @@ public class Shooter implements ISubsystem {
     {
         _hoodEncoder.reset();
     }
-    public void goShoot()
+    public void readyShot()
     {
         //setSpeed(_shooterSpeed);
         setHoodPosition(_hoodPosition);
+    }
+    public boolean goShoot()
+    {
+        boolean shooterAtSpeed = (Math.abs(_leftMotor.getClosedLoopError()) < 500);
+        
+        return shooterAtSpeed && _hoodPositionPID.atSetpoint();
     }
     private void setSpeed(double speed)
     {

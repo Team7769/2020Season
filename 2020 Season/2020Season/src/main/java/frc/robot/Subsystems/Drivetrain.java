@@ -262,6 +262,14 @@ public class Drivetrain implements ISubsystem{
     {
       _pathFollower.setAfterLeftDiamondToTrenchPath(getTrajectoryConfig(false));
     }
+    public void setLineToStealPath()
+    {
+      _pathFollower.setLineToStealPath(getTrajectoryConfig(false));
+    }
+    public void setStealToGoalPath()
+    {
+      _pathFollower.setStealToGoalPath(getTrajectoryConfig(true));
+    }
 
     public void startPath()
     {
