@@ -51,7 +51,7 @@ public final class Constants {
     public static final int kConveyorChannel = 6;
 
     //Test Robot Configuration
-
+    /*
     public static final int kDriveEncoderTicksPerRevolution = 2048;
     public static final double kDriveWheelDiameter = 0.15;
     public static final double kDriveDistancePerPulse = (kDriveWheelDiameter * Math.PI) / kDriveEncoderTicksPerRevolution;
@@ -133,8 +133,8 @@ public final class Constants {
     public static final double kBallProximity = 1.0;
     
     public static final double kMotorTemperatureThreshold = 32; //Degrees Celsius
-
-    /*
+    */
+    
     //Competition Robot Settings
 
     public static final int kDriveEncoderTicksPerRevolution = 2048;
@@ -145,10 +145,7 @@ public final class Constants {
     public static final double ksVolts = 0.149;
     public static final double kvVoltSecondsPerMeter = 2.86;
     public static final double kaVoltSecondsSquaredPerMeter = 0.252;
-
-    // Example value only - as above, this must be tuned for your drive!
-    public static final double kPDriveVel = 9.77;
-
+    
     //
     public static final double kTrackwidthMeters = 0.6223;
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackwidthMeters);
@@ -156,16 +153,53 @@ public final class Constants {
     //public static final double kMaxSpeedMetersPerSecond = 1.25;
     //public static final double kMaxAccelerationMetersPerSecondSquared = 1.25;
 
-    public static final double kMaxSpeedMetersPerSecond = 2;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 2;
+    public static final double kMaxSpeedMetersPerSecond = 2.5;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 2.5;
 
+    //Path Following
     public static final double kPathFollowingkP = 4.5;
+
+    //Starting Point- Center Line
+    public static final int kCenterGoalLineX = 0;
+    public static final int kCenterGoalLineY = 0;
+    public static final int kCenterGoalLineStartAngle = 0;
+    //Trench Path Points
+    public static final double kTrenchPathMidpointX = 2.2;
+    public static final double kTrenchPathMidpointY = 1.40;
+    public static final double kTrenchPathEndX = 5.1;
+    public static final double kTrenchPathEndY = 1.50;
+    public static final double kTrenchPathEndAngle = 0.0;
+
+    //To-the-Rendevous(from the left)
+    public static final double kLeftDiamondPathMidpointX = 1.15;
+    public static final double kLeftDiamondPathMidpointY = 0.0;
+    public static final double kLeftDiamondPathEndX = 2.4;
+    public static final double kLeftDiamondPathEndY = -0.25;
+    public static final double kLeftDiamondPathEndAngle = -55;
+
+    //To-the-Trench(from the rendevous)
+    public static final double kLeftDiamondTrenchPathMidpointX = 2.358;
+    public static final double kLeftDiamondTrenchPathMidpointY = 0.778;
+    public static final double kLeftDiamondTrenchPathEndX = 1.29;
+    public static final double kLeftDiamondTrenchPathEndY = 1.5;
+    public static final int kLeftDiamondTrenchPathEndAngle = 0;
+    
+    //Line Up
+    public static final double kAfterLeftDiamondPathMidpointX = 3.25;
+    public static final double kAfterLeftDiamondPathMidpointY = 1.5;
+    public static final double kAfterLeftDiamondPathEndX = 5.1;
+    public static final double kAfterLeftDiamondPathEndY = 1.5;
+    public static final int kAfterLeftDiamondPathEndAngle = 0;
+
 
     public static final double kTurnkP = 0.067;
     public static final double kTurnkI = 0.0;
     public static final double kTurnkD = 0.0035;
 
-    public static final double kHoodPositionkP = 0.25;
+    public static final double kShootP = .015;
+    public static final double kShootF = .0473;
+
+    public static final double kHoodPositionkP = 1.25;
     public static final double kHoodPositionkI = 0.0;
     public static final double kHoodPositionkD = 0.0;
 
@@ -173,16 +207,17 @@ public final class Constants {
 
     public static final double kPopShotVelocity = 15000;
     public static final double kLineShotVelocity = 12000;
-    public static final double kTrenchShotVelocity = 16000;
-    public static final double kFarShotVelocity = 23000;
+    public static final double kTrenchShotVelocity = 19000;
+    public static final double kFarShotVelocity = 21300;
 
-    public static final double kPopShotHoodPosition = -.3;
-    public static final double kLineShotHoodPosition = -.5;
-    public static final double kTrenchShotHoodPosition = -.8;
-    public static final double kFarShotHoodPosition = -1.0;
+    public static final double kPopShotHoodPosition = 1.7;
+    public static final double kLineShotHoodPosition = 1.2;
+    public static final double kTrenchShotHoodPosition = .8;
+    public static final double kFarShotHoodPosition = .27;
 
     public static final double kBallProximity = 1.0;
     
     public static final double kMotorTemperatureThreshold = 32; //Degrees Celsius
-    */
+
+    
 }

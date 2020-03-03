@@ -46,8 +46,8 @@ public class Collector implements ISubsystem {
 
         _backConveyor.follow(_frontConveyor);
 
-        _innerCollectorSpeed = 0;
-        _outerCollectorSpeed = 0;
+        _innerCollectorSpeed = .6;
+        _outerCollectorSpeed = .3;
         _conveyorSpeed = 0;
         _indexing = true;
         _ballCount = 0;
@@ -70,19 +70,19 @@ public class Collector implements ISubsystem {
 
     public void ManualCollect(){
         _innerCollector.set(_innerCollectorSpeed);
-        _outerCollector.set(_outerCollectorSpeed);
+        _outerCollector.set(-_outerCollectorSpeed);
     }
     public void spit()
     {
         _collectorSolenoid.set(Value.kForward);
         _innerCollector.set(_innerCollectorSpeed);
-        _outerCollector.set(_outerCollectorSpeed);
+        _outerCollector.set(-_outerCollectorSpeed);
     }
     public void succ()
     {
         _collectorSolenoid.set(Value.kForward);
         _innerCollector.set(-_innerCollectorSpeed);
-        _outerCollector.set(-_outerCollectorSpeed);
+        _outerCollector.set(_outerCollectorSpeed);
     }
     public void stop()
     {

@@ -162,6 +162,10 @@ public class Shooter implements ISubsystem {
     public void stopHood(){
         _hoodMotor.set(0);
     }
+    public void stop()
+    {
+        _leftMotor.set(ControlMode.PercentOutput, 0);
+    }
     public void monitorTemperature()
     {
         if (_leftMotor.getTemperature() >= Constants.kMotorTemperatureThreshold)
@@ -198,7 +202,7 @@ public class Shooter implements ISubsystem {
 
     @Override
     public void ReadDashboardData() {
-        _shooterSpeed = SmartDashboard.getNumber("manualShooterSpeed", 0);
+        //_shooterSpeed = SmartDashboard.getNumber("manualShooterSpeed", 0);
     }
 
 }

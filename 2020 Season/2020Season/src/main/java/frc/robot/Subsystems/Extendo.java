@@ -30,7 +30,7 @@ public class Extendo implements ISubsystem {
         _rightMotor.follow(_leftMotor);
 
         _extendoEncoder = new Encoder(Constants.kExtendoEncoderPortA, Constants.kExtendoEncoderPortB);
-        _extendoSpeed = 0;
+        _extendoSpeed = .5;
 
         _extendoSolenoid = new DoubleSolenoid(Constants.kExtendoLockChannelForward, Constants.kExtendoLockChannelReverse );
        

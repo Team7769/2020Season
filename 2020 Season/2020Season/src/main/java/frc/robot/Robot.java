@@ -86,6 +86,7 @@ public class Robot extends TimedRobot {
     _goalDistance = 0;
     _autonomousMode = 0;
     _ledValue = -0.99;
+    _limelight.setDashcam();
     
     SmartDashboard.putNumber("ledValue", _ledValue);
   }
@@ -397,11 +398,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    //teleopShoot();
+    teleopShoot();
     teleopDrive();
     //teleopLEDs();
-    //teleopCollect();
-    //teleopExtendo();
+    teleopCollect();
+    teleopExtendo();
   }
   public void teleopShoot()
   {
@@ -430,6 +431,7 @@ public class Robot extends TimedRobot {
       _shooter.readyShot();
     } else {
       _shooter.stopHood();
+      _shooter.stop();
       //_collector.stopFeed();
     }
     _shooter.monitorTemperature();
@@ -438,7 +440,7 @@ public class Robot extends TimedRobot {
   public void teleopDrive()
   {
     double augmentTurn = 0;
-    if (Math.abs(_driverController.getTriggerAxis(Hand.kLeft)) > 0.05)
+    if (Math.abs(_driverController.getTriggerAxis(Hand.kLeft)) > 0.05 && _limelight.hasTarget())
     {
       _limelight.setAimbot();
       augmentTurn = _drivetrain.followTarget();
@@ -482,10 +484,10 @@ public class Robot extends TimedRobot {
 
   public void teleopCollect()
   {
-    if (_operatorController.getBumperPressed(Hand.kRight))
+    if (_operatorController.getBumper(Hand.kRight))
     {
       _collector.succ();
-    } else if (_operatorController.getBumperPressed(Hand.kLeft))
+    } else if (_operatorController.getBumper(Hand.kLeft))
     {
       _collector.spit();
     } else if (_operatorController.getBackButtonPressed())
@@ -508,9 +510,9 @@ public class Robot extends TimedRobot {
 
     if (_operatorController.getPOV() == 0)
     {
-      _extendo.extend();
-    } else if (_operatorController.getPOV() == 180){
       _extendo.unextend();
+    } else if (_operatorController.getPOV() == 180){
+      _extendo.extend();
     } else {
       _extendo.stop();
     }
