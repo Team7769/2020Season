@@ -9,6 +9,7 @@ package frc.robot;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -46,6 +47,7 @@ public class Robot extends TimedRobot {
   private Limelight _limelight;
   private Extendo _extendo;
   private ArrayList<ISubsystem> _subsystems;
+  private Compressor _compressor;
 
   private LEDController _ledController;
 
@@ -63,25 +65,28 @@ public class Robot extends TimedRobot {
     
     _drivetrain = Drivetrain.GetInstance();
     _ledController = LEDController.GetInstance();
-    //_shooter = Shooter.GetInstance();
-    //_collector = Collector.GetInstance();
+    _shooter = Shooter.GetInstance();
+    _collector = Collector.GetInstance();
     //_spinnyThingy = SpinnyThingy.GetInstance();
     _limelight = Limelight.GetInstance();
-    //_extendo = Extendo.GetInstance();
+    _extendo = Extendo.GetInstance();
+    _compressor = new Compressor();
+    _compressor.start();
 
     _subsystems = new ArrayList<ISubsystem>();
 
     _subsystems.add(_drivetrain);
-    //_subsystems.add(_shooter);
-    //_subsystems.add(_collector);
+    _subsystems.add(_shooter);
+    _subsystems.add(_collector);
     //_subsystems.add(_spinnyThingy);
-    //_subsystems.add(_extendo);
+    _subsystems.add(_extendo);
     _autonomousCase = 0;
     _autonomousLoops = 0;
     _aimLoops = 0;
     _goalDistance = 0;
     _autonomousMode = 0;
     _ledValue = -0.99;
+    
     SmartDashboard.putNumber("ledValue", _ledValue);
   }
 
@@ -400,9 +405,6 @@ public class Robot extends TimedRobot {
   }
   public void teleopShoot()
   {
-    if (_driverController.getBumper(Hand.kLeft)){
-      //_shooter.ManualShoot();
-    }
     if (_operatorController.getAButton())
     {
       _shooter.setPopShot();
@@ -426,19 +428,11 @@ public class Robot extends TimedRobot {
     if (Math.abs(_driverController.getTriggerAxis(Hand.kLeft)) > 0.05)
     {
       _shooter.readyShot();
-    }
-    if (_operatorController.getBumper(Hand.kLeft))
-    {
-      _shooter.moveHood(-.25);
-    } else if (_operatorController.getBumper(Hand.kRight))
-    {
-      _shooter.moveHood(.25);
-    }
-    else {
+    } else {
       _shooter.stopHood();
       //_collector.stopFeed();
     }
-    //_shooter.monitorTemperature();
+    _shooter.monitorTemperature();
   }
 
   public void teleopDrive()
@@ -454,7 +448,7 @@ public class Robot extends TimedRobot {
     double throttle = -_driverController.getY(Hand.kLeft);
     double turn = _driverController.getX(Hand.kRight);
   
-    _drivetrain.FunnyDrive(throttle, turn - augmentTurn);
+    _drivetrain.FunnyDrive(throttle, turn + augmentTurn);
     if (_drivetrain.isTurnFinished())
       {
         SmartDashboard.putBoolean("lockedOn", true);
@@ -488,22 +482,40 @@ public class Robot extends TimedRobot {
 
   public void teleopCollect()
   {
-    if (_operatorController.getBumper(Hand.kLeft))
+    if (_operatorController.getBumperPressed(Hand.kRight))
     {
       _collector.succ();
-    } else if (_operatorController.getBumper(Hand.kRight))
+    } else if (_operatorController.getBumperPressed(Hand.kLeft))
     {
       _collector.spit();
+    } else if (_operatorController.getBackButtonPressed())
+    {
+      _collector.retractCollector();
     } else {
       _collector.stop();
     }
-    _collector.index();
+    //_collector.index();
   }
   public void teleopExtendo()
   {
-    if (_driverController.getYButton()){
-      _extendo.manualExtendo();
+    if (_driverController.getBackButtonPressed())
+    {
+      _extendo.extendoLock();
+    } else if (_driverController.getStartButtonPressed())
+    {
+      _extendo.extendoRelease();
     }
+
+    if (_operatorController.getPOV() == 0)
+    {
+      _extendo.extend();
+    } else if (_operatorController.getPOV() == 180){
+      _extendo.unextend();
+    } else {
+      _extendo.stop();
+    }
+
+
   }
   /**
    * This function is called periodically during test mode.

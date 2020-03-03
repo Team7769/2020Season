@@ -53,6 +53,18 @@ public class Extendo implements ISubsystem {
     {
         setSpeed(_extendoSpeed);
     }
+    public void extend() 
+    {
+        setSpeed(_extendoSpeed);
+    }
+    public void unextend()
+    {
+        setSpeed(-_extendoSpeed);
+    }
+    public void stop()
+    {
+        setSpeed(0);
+    }
     public void extendoLock()
     {
         _extendoSolenoid.set(Value.kForward);

@@ -40,32 +40,34 @@ public class Shooter implements ISubsystem {
     private String _currentShot;
 
     public Shooter() {
-        //_leftMotor = new TalonFX(Constants.kLeftShooterId);
-        //_rightMotor = new TalonFX(Constants.kRightShooterId);
+        _leftMotor = new TalonFX(Constants.kLeftShooterId);
+        _rightMotor = new TalonFX(Constants.kRightShooterId);
         _hoodMotor = new CANSparkMax(Constants.kHoodId, MotorType.kBrushless);
-        //_hoodMotor.setInverted(true);
+        _hoodMotor.setInverted(true);
         _hoodEncoder = new DutyCycleEncoder(Constants.kHoodEncoderPortA);
         //_hoodEncoder.reset();
         
         
-        //_leftCooler = new Solenoid(Constants.kLeftShooterChannel);
-        //_rightCooler = new Solenoid(Constants.kRightShooterChannel);
+        _leftCooler = new Solenoid(Constants.kLeftShooterChannel);
+        _rightCooler = new Solenoid(Constants.kRightShooterChannel);
 
 	    /** Config Objects for motor controllers */
 	    TalonFXConfiguration _leftConfig = new TalonFXConfiguration();
         TalonFXConfiguration _rightConfig = new TalonFXConfiguration();
         
-        //_leftConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor; //Local Feedback Source
+        _leftConfig.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor; //Local Feedback Source
+        _leftConfig.slot0.kP = Constants.kShootP;
+        _leftConfig.slot0.kF = Constants.kShootF;
 
 		/* Configure the Remote (Left) Talon's selected sensor as a remote sensor for the right Talon */
-		//_rightConfig.remoteFilter0.remoteSensorDeviceID = _leftMotor.getDeviceID(); //Device ID of Remote Source
-		//_rightConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.TalonFX_SelectedSensor; //Remote Source Type
+		_rightConfig.remoteFilter0.remoteSensorDeviceID = _leftMotor.getDeviceID(); //Device ID of Remote Source
+		_rightConfig.remoteFilter0.remoteSensorSource = RemoteSensorSource.TalonFX_SelectedSensor; //Remote Source Type
 
-        //_leftMotor.setInverted(true);
-        //_rightMotor.follow(_leftMotor, FollowerType.PercentOutput);
+        _leftMotor.setInverted(true);
+        _rightMotor.follow(_leftMotor, FollowerType.PercentOutput);
 
-        //_leftMotor.configAllSettings(_leftConfig);
-        //_rightMotor.configAllSettings(_rightConfig);
+        _leftMotor.configAllSettings(_leftConfig);
+        _rightMotor.configAllSettings(_rightConfig);
 
         _hoodPositionPID = new PIDController(Constants.kHoodPositionkP, Constants.kHoodPositionkI, Constants.kHoodPositionkD);
         _hoodPositionPID.setTolerance(0.05);
@@ -90,7 +92,7 @@ public class Shooter implements ISubsystem {
     }
     public void readyShot()
     {
-        //setSpeed(_shooterSpeed);
+        setSpeed(_shooterSpeed);
         setHoodPosition(_hoodPosition);
     }
     public boolean goShoot()
@@ -152,11 +154,9 @@ public class Shooter implements ISubsystem {
         _hoodMotor.set(speed);
     }
     public void Shoot(double speed){
-        //_leftMotor.set(speed);
         _leftMotor.set(ControlMode.PercentOutput, speed);
     }
     public void ManualShoot(){
-        //_leftMotor.set(_shooterSpeed);
         _leftMotor.set(ControlMode.PercentOutput, _shooterSpeed);
     }
     public void stopHood(){
@@ -180,14 +180,14 @@ public class Shooter implements ISubsystem {
 
     @Override
     public void LogTelemetry() {
-        //SmartDashboard.putNumber("shooterRPM", _leftMotor.getSelectedSensorVelocity());
-        //SmartDashboard.putNumber("shooterInputCurrent", _leftMotor.getSupplyCurrent());
-        //SmartDashboard.putNumber("shooterOutputCurrent", _leftMotor.getStatorCurrent());
+        SmartDashboard.putNumber("shooterRPM", _leftMotor.getSelectedSensorVelocity());
+        SmartDashboard.putNumber("shooterInputCurrent", _leftMotor.getSupplyCurrent());
+        SmartDashboard.putNumber("shooterOutputCurrent", _leftMotor.getStatorCurrent());
 
-        //SmartDashboard.putNumber("leftShooterTemperature", _leftMotor.getTemperature());
-        //SmartDashboard.putNumber("rightShooterTemperature", _rightMotor.getTemperature());
-        //SmartDashboard.putBoolean("leftCoolerEngaged", _leftCooler.get());
-        //SmartDashboard.putBoolean("rightCoolerEngaged", _rightCooler.get());
+        SmartDashboard.putNumber("leftShooterTemperature", _leftMotor.getTemperature());
+        SmartDashboard.putNumber("rightShooterTemperature", _rightMotor.getTemperature());
+        SmartDashboard.putBoolean("leftCoolerEngaged", _leftCooler.get());
+        SmartDashboard.putBoolean("rightCoolerEngaged", _rightCooler.get());
         SmartDashboard.putNumber("hoodPower", _hoodMotor.get());
 
         SmartDashboard.putNumber("hoodPosition", _hoodEncoder.get());

@@ -33,9 +33,8 @@ public final class Constants {
     public static final int kRightEncoderPortA = 2;
     public static final int kRightEncoderPortB = 3;
     public static final int kHoodEncoderPortA = 4;
-    public static final int kHoodEncoderPortB = 5;
-    public static final int kExtendoEncoderPortA = 6;
-    public static final int kExtendoEncoderPortB = 7;
+    public static final int kExtendoEncoderPortA = 5;
+    public static final int kExtendoEncoderPortB = 6;
 
     //Analog
     public static final int kIntakeSensorPort = 0;
@@ -112,6 +111,9 @@ public final class Constants {
     public static final double kTurnkI = 0.0;
     public static final double kTurnkD = 0.0035;
 
+    public static final double kShootP = .015;
+    public static final double kShootF = .0473;
+
     public static final double kHoodPositionkP = 1.25;
     public static final double kHoodPositionkI = 0.0;
     public static final double kHoodPositionkD = 0.0;
@@ -120,8 +122,8 @@ public final class Constants {
 
     public static final double kPopShotVelocity = 15000;
     public static final double kLineShotVelocity = 12000;
-    public static final double kTrenchShotVelocity = 16000;
-    public static final double kFarShotVelocity = 23000;
+    public static final double kTrenchShotVelocity = 19000;
+    public static final double kFarShotVelocity = 21300;
 
     public static final double kPopShotHoodPosition = 2.4;
     public static final double kLineShotHoodPosition = 1.6;

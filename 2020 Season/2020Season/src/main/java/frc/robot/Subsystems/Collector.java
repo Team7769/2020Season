@@ -86,10 +86,13 @@ public class Collector implements ISubsystem {
     }
     public void stop()
     {
-        _collectorSolenoid.set(Value.kReverse);
         _frontConveyor.set(0);
         _innerCollector.set(0);
         _outerCollector.set(0);
+    }
+    public void retractCollector()
+    {
+        _collectorSolenoid.set(Value.kReverse);
     }
     public void index()
     {

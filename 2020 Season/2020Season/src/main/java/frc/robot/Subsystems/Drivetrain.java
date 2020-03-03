@@ -371,6 +371,6 @@ public class Drivetrain implements ISubsystem{
           output = -0.5;
         }
       }
-      return output;
+      return -output;
     }
 }
