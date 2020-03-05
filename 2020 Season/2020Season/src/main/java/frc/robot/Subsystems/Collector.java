@@ -44,11 +44,11 @@ public class Collector implements ISubsystem {
         _collectorSolenoid = new DoubleSolenoid(Constants.kCollectorChannelForward, Constants.kCollectorChannelReverse);
         _ballStop = new Solenoid(Constants.kConveyorChannel);
 
-        _backConveyor.follow(_frontConveyor);
+        _backConveyor.follow(_frontConveyor, true);
 
-        _innerCollectorSpeed = .6;
-        _outerCollectorSpeed = .3;
-        _conveyorSpeed = 0;
+        _innerCollectorSpeed = .3;
+        _outerCollectorSpeed = .6;
+        _conveyorSpeed = .25;
         _indexing = true;
         _ballCount = 0;
         _hasCounted = false;
@@ -74,15 +74,15 @@ public class Collector implements ISubsystem {
     }
     public void spit()
     {
-        _collectorSolenoid.set(Value.kForward);
-        _innerCollector.set(_innerCollectorSpeed);
-        _outerCollector.set(-_outerCollectorSpeed);
+        _collectorSolenoid.set(Value.kReverse);
+        _innerCollector.set(-_innerCollectorSpeed);
+        _outerCollector.set(_outerCollectorSpeed);
     }
     public void succ()
     {
-        _collectorSolenoid.set(Value.kForward);
-        _innerCollector.set(-_innerCollectorSpeed);
-        _outerCollector.set(_outerCollectorSpeed);
+        _collectorSolenoid.set(Value.kReverse);
+        _innerCollector.set(_innerCollectorSpeed);
+        _outerCollector.set(-_outerCollectorSpeed);
     }
     public void stop()
     {
@@ -92,7 +92,7 @@ public class Collector implements ISubsystem {
     }
     public void retractCollector()
     {
-        _collectorSolenoid.set(Value.kReverse);
+        _collectorSolenoid.set(Value.kForward);
     }
     public void index()
     {
@@ -104,33 +104,43 @@ public class Collector implements ISubsystem {
             _frontConveyor.set(0);
         }
 
-        if (_indexSensor.isBlocked() && !_hasCounted)
-        {
-            _hasCounted = true;
-            _ballCount++;
-        } else if (!_indexSensor.isBlocked())
-        {
-            _hasCounted = false;
-        }
+        //if (_indexSensor.isBlocked() && !_hasCounted)
+        //{
+        //    _hasCounted = true;
+        //    _ballCount++;
+        //} else if (!_indexSensor.isBlocked())
+        //{
+        //    _hasCounted = false;
+        //}
         
+    }
+    public void goUp()
+    {
+        _frontConveyor.set(_conveyorSpeed);
+    }
+    public void empty()
+    {
+        _frontConveyor.set(-_conveyorSpeed);
+        _innerCollector.set(-_innerCollectorSpeed);
+        _outerCollector.set(_outerCollectorSpeed);
     }
     public void feed()
     {
-        _ballStop.set(false);
+        _ballStop.set(true);
         _frontConveyor.set(_conveyorSpeed);
         _indexing = false;
 
-        if (_outIndexSensor.isBlocked() && !_hasLeft)
-        {
-            _hasLeft = true;
-            _ballCount--;
-        } else if (!_outIndexSensor.isBlocked())
-        {
-            _hasLeft = false;
-        }
+        //if (_outIndexSensor.isBlocked() && !_hasLeft)
+        //{
+        //    _hasLeft = true;
+        //    _ballCount--;
+        //} else if (!_outIndexSensor.isBlocked())
+        //{
+        //    _hasLeft = false;
+        //}
     }
     public void stopFeed() {
-        _ballStop.set(true);
+        _ballStop.set(false);
         if (!_indexing)
         {
             _frontConveyor.set(0);

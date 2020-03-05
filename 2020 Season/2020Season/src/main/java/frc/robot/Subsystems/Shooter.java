@@ -74,8 +74,10 @@ public class Shooter implements ISubsystem {
 
         _shooterSpeed = 0;
         _hoodPosition = 0;
+
         _currentShot = "None";
         SmartDashboard.putNumber("manualShooterSpeed", 0);
+        setLineShot();
 
     }
     public static Shooter GetInstance() 
@@ -198,11 +200,19 @@ public class Shooter implements ISubsystem {
         SmartDashboard.putNumber("hoodOffset", _hoodEncoder.getPositionOffset());
         SmartDashboard.putNumber("hoodFrequency", _hoodEncoder.getFrequency());
         SmartDashboard.putString("currentShot", _currentShot);
+        
+        SmartDashboard.putNumber("shooterError", _leftMotor.getClosedLoopError());
+        SmartDashboard.putBoolean("hoodPositionAtSetpoint", _hoodPositionPID.atSetpoint());
     }
 
     @Override
     public void ReadDashboardData() {
         //_shooterSpeed = SmartDashboard.getNumber("manualShooterSpeed", 0);
+    }
+
+    public boolean isCloseShot()
+    {
+        return _currentShot == "Pop Shot";
     }
 
 }

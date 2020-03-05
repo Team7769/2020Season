@@ -205,19 +205,19 @@ public final class Constants {
 
     public static final double kGoalHeight = 4.26; //feet
 
-    public static final double kPopShotVelocity = 15000;
-    public static final double kLineShotVelocity = 12000;
+    public static final double kPopShotVelocity = 13000;
+    public static final double kLineShotVelocity = 15000;
     public static final double kTrenchShotVelocity = 19000;
     public static final double kFarShotVelocity = 21300;
 
-    public static final double kPopShotHoodPosition = 1.7;
-    public static final double kLineShotHoodPosition = 1.2;
-    public static final double kTrenchShotHoodPosition = .8;
-    public static final double kFarShotHoodPosition = .27;
+    public static final double kPopShotHoodPosition = 2.25;
+    public static final double kLineShotHoodPosition = .95;
+    public static final double kTrenchShotHoodPosition = 1.0;
+    public static final double kFarShotHoodPosition = .6;
 
     public static final double kBallProximity = 1.0;
     
-    public static final double kMotorTemperatureThreshold = 32; //Degrees Celsius
+    public static final double kMotorTemperatureThreshold = 38; //Degrees Celsius
 
     
 }

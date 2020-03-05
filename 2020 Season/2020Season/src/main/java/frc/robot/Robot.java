@@ -70,8 +70,8 @@ public class Robot extends TimedRobot {
     //_spinnyThingy = SpinnyThingy.GetInstance();
     _limelight = Limelight.GetInstance();
     _extendo = Extendo.GetInstance();
-    _compressor = new Compressor();
-    _compressor.start();
+    //_compressor = new Compressor();
+    //_compressor.start();
 
     _subsystems = new ArrayList<ISubsystem>();
 
@@ -118,7 +118,8 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     if (_driverController.getBackButtonPressed())
     {
-      autonomousInit();
+      //autonomousInit();
+      _shooter.resetSensors();
     }
     _autonomousMode = (int) SmartDashboard.getNumber("autonomousMode", 0);
   }
@@ -423,16 +424,27 @@ public class Robot extends TimedRobot {
     {
       if (_shooter.goShoot())
       {
-        //_collector.feed();
+        _collector.feed();
+      } else {
+        _collector.stopFeed();
       }
-    } 
+    } else {
+      if (_operatorController.getStartButton()) {
+        _collector.goUp();
+      } else if (_operatorController.getBackButton())
+      {
+        _collector.empty();
+      } else {
+        _collector.stop();
+      }
+    }
     if (Math.abs(_driverController.getTriggerAxis(Hand.kLeft)) > 0.05)
     {
       _shooter.readyShot();
     } else {
       _shooter.stopHood();
       _shooter.stop();
-      //_collector.stopFeed();
+      _collector.stopFeed();
     }
     _shooter.monitorTemperature();
   }
@@ -440,7 +452,7 @@ public class Robot extends TimedRobot {
   public void teleopDrive()
   {
     double augmentTurn = 0;
-    if (Math.abs(_driverController.getTriggerAxis(Hand.kLeft)) > 0.05 && _limelight.hasTarget())
+    if (Math.abs(_driverController.getTriggerAxis(Hand.kLeft)) > 0.05 && !_shooter.isCloseShot())
     {
       _limelight.setAimbot();
       augmentTurn = _drivetrain.followTarget();
@@ -486,34 +498,29 @@ public class Robot extends TimedRobot {
   {
     if (_operatorController.getBumper(Hand.kRight))
     {
-      _collector.succ();
+      _collector.spit();
     } else if (_operatorController.getBumper(Hand.kLeft))
     {
-      _collector.spit();
+      _collector.succ();
     } else if (_operatorController.getBackButtonPressed())
     {
       _collector.retractCollector();
-    } else {
-      _collector.stop();
-    }
+    } 
+    
+    
     //_collector.index();
   }
   public void teleopExtendo()
   {
-    if (_driverController.getBackButtonPressed())
-    {
-      _extendo.extendoLock();
-    } else if (_driverController.getStartButtonPressed())
-    {
-      _extendo.extendoRelease();
-    }
-
     if (_operatorController.getPOV() == 0)
     {
+      _extendo.extendoRelease();
       _extendo.unextend();
     } else if (_operatorController.getPOV() == 180){
+      _extendo.extendoRelease();
       _extendo.extend();
     } else {
+      _extendo.extendoLock();
       _extendo.stop();
     }
 
