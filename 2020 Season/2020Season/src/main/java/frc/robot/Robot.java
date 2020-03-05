@@ -121,6 +121,7 @@ public class Robot extends TimedRobot {
       //autonomousInit();
       _shooter.resetSensors();
     }
+    _limelight.setDashcam();
     _autonomousMode = (int) SmartDashboard.getNumber("autonomousMode", 0);
   }
 
@@ -429,14 +430,14 @@ public class Robot extends TimedRobot {
         _collector.stopFeed();
       }
     } else {
-      if (_operatorController.getStartButton()) {
+      /*if (_operatorController.getStartButton()) {
         _collector.goUp();
       } else if (_operatorController.getBackButton())
       {
         _collector.empty();
       } else {
         _collector.stop();
-      }
+      }*/
     }
     if (Math.abs(_driverController.getTriggerAxis(Hand.kLeft)) > 0.05)
     {
@@ -505,10 +506,12 @@ public class Robot extends TimedRobot {
     } else if (_operatorController.getBackButtonPressed())
     {
       _collector.retractCollector();
-    } 
+    } else {
+      _collector.stop();
+    }
     
     
-    //_collector.index();
+    _collector.index();
   }
   public void teleopExtendo()
   {
