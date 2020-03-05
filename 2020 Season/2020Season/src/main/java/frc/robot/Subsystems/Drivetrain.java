@@ -280,7 +280,6 @@ public class Drivetrain implements ISubsystem{
     public void followPath()
     {
         var target = _pathFollower.getPathTarget(getPose());
-
         SmartDashboard.putNumber("leftSpeed", getWheelSpeeds().leftMetersPerSecond);
         SmartDashboard.putNumber("rightSpeed", getWheelSpeeds().rightMetersPerSecond);
         SmartDashboard.putNumber("leftTargetSpeed", target.leftMetersPerSecond);

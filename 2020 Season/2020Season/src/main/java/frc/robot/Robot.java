@@ -127,14 +127,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    
-    _drivetrain.resetEncoders();
     _drivetrain.resetGyro();
-    _drivetrain.updatePose();
-    _drivetrain.resetPIDControllers();
+    resetOdometry();
     _autonomousLoops = 0;
     _autonomousCase = 0;
     _aimLoops = 0;
+  }
+  public void resetOdometry()
+  {
+    _drivetrain.resetEncoders();
+    _drivetrain.updatePose();
+    _drivetrain.resetPIDControllers();
   }
 
   /**
@@ -172,15 +175,15 @@ public class Robot extends TimedRobot {
         //Start path from the line to the enemy trench
         _drivetrain.setLineToStealPath();
         _drivetrain.startPath();
-        //_shooter.setLineShot();
-        //_collector.index();
+        _shooter.setLineShot();
+        _collector.succ();
+        _collector.index();
         _autonomousCase++;
         break;
       case 1:
         //End after picking up the trench balls. Start path to the goal.
         _drivetrain.followPath();
-        //_collector.succ();
-        //_collector.index();
+        _collector.index();
         if (_drivetrain.isPathFinished())
         {
           _drivetrain.setStealToGoalPath();
@@ -201,32 +204,42 @@ public class Robot extends TimedRobot {
       case 3:
         //Drive path to the goal.
         _drivetrain.followPath();
-        //_collector.index();
+        _shooter.readyShot();
+        _collector.index();
         if (_drivetrain.isPathFinished())
         {
+          _autonomousLoops = 0;
           _autonomousCase++;
         }
         break;
       case 4:
         //Turn to the goal.
-        //_shooter.readyShot();
-        //_collector.index();
-        if (turnToAngle(0))
+        _shooter.readyShot();
+        _collector.index();
+        if (turnToAngle(0) || _autonomousLoops > 150)
         {
+          
+          _limelight.setAimbot();
           _autonomousCase++;
         } else {
           _aimLoops = 0;
         }
         break;
       case 5:
-        //_shooter.readyShot();
-        //if(_shooter.goShoot()){
-        //  _collector.feed();
-        //} else {
-        //  _collector.stopFeed();
-        //}
-        _drivetrain.FunnyDrive(0, 0);
+        autonomousAimAndShoot();
         break;
+    }
+  }
+  public void autonomousAimAndShoot() {
+    _shooter.readyShot();
+
+    var adjust = _drivetrain.followTarget();
+    _drivetrain.FunnyDrive(0, adjust);
+    
+    if(_shooter.goShoot() && Math.abs(adjust) <= 0.075){
+      _collector.feed();
+    } else {
+      _collector.stopFeed();
     }
   }
   public void diamondFirstTrenchAuto()
@@ -292,11 +305,27 @@ public class Robot extends TimedRobot {
   {
     switch (_autonomousCase) {
       case 0:
+        _limelight.setAimbot();
+        _shooter.setLineShot();
         _drivetrain.setLineToTrenchPath();
+        autonomousAimAndShoot();
+        if (_autonomousLoops > 150)
+        {
+          _limelight.setDashcam();
+          _collector.succ();
+          _collector.stopFeed();
+          _shooter.stop();
+          _shooter.stopHood();
+          _autonomousCase++;
+        }
+      case 1:
+        _collector.index();
+        _collector.succ();
         _drivetrain.startPath();
         _autonomousCase++;
         break;
-      case 1:
+      case 2:
+        _collector.index();
         _drivetrain.followPath();
         if (_drivetrain.isPathFinished())
         {
@@ -306,7 +335,7 @@ public class Robot extends TimedRobot {
           //_autonomousCase = 7769;
         }
         break;
-      case 2:
+      case 3:
         _drivetrain.tankDriveVolts(0, 0);
         if (_autonomousLoops > 0) {
           _autonomousLoops = 0;
@@ -314,42 +343,18 @@ public class Robot extends TimedRobot {
           _autonomousCase++;
         }
         break;
-      case 3:
+      case 4:
+        _limelight.setAimbot();
+        _shooter.readyShot();
         _drivetrain.followPath();
         if (_drivetrain.isPathFinished())
         {
-          _drivetrain.setLineToLeftDiamondPath();
           _autonomousCase++;
+          _autonomousLoops = 0;
         }
-        break;
-      case 4:
-        _drivetrain.tankDriveVolts(0, 0);
-        _drivetrain.startPath();
-        _autonomousCase++;
-
         break;
       case 5:
-        _drivetrain.followPath();
-        if (_drivetrain.isPathFinished())
-        {
-          _drivetrain.setLeftDiamondToLinePath();
-          _autonomousCase++;
-        }
-        break;
-      case 6:
-        _drivetrain.tankDriveVolts(0, 0);
-        _drivetrain.startPath();
-        _autonomousCase++;
-        break;
-      case 7:
-        _drivetrain.followPath();
-        if (_drivetrain.isPathFinished())
-        {
-          _autonomousCase++;
-        }
-        break;
-      case 8:
-        _drivetrain.FunnyDrive(0, 0);
+        autonomousAimAndShoot();
         break;
       case 7769:
         _drivetrain.tankDriveVolts(0, 0);

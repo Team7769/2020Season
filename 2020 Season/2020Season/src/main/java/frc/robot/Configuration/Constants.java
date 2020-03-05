@@ -217,7 +217,7 @@ public final class Constants {
 
     public static final double kBallProximity = 1.0;
     
-    public static final double kMotorTemperatureThreshold = 38; //Degrees Celsius
+    public static final double kMotorTemperatureThreshold = 48; //Degrees Celsius
 
     
 }
