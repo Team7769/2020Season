@@ -45,7 +45,7 @@ public class Shooter implements ISubsystem {
         _hoodMotor = new CANSparkMax(Constants.kHoodId, MotorType.kBrushless);
         _hoodMotor.setInverted(true);
         _hoodEncoder = new DutyCycleEncoder(Constants.kHoodEncoderPortA);
-        //_hoodEncoder.reset();
+        
         
         
         _leftCooler = new Solenoid(Constants.kLeftShooterChannel);

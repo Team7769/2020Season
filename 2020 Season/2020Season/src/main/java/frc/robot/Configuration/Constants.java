@@ -153,8 +153,8 @@ public final class Constants {
     //public static final double kMaxSpeedMetersPerSecond = 1.25;
     //public static final double kMaxAccelerationMetersPerSecondSquared = 1.25;
 
-    public static final double kMaxSpeedMetersPerSecond = 2;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 2;
+    public static final double kMaxSpeedMetersPerSecond = 1.25;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 1.25;
 
     //Path Following
     public static final double kPathFollowingkP = 1.5; //16.1
@@ -210,10 +210,10 @@ public final class Constants {
     public static final double kTrenchShotVelocity = 19000;
     public static final double kFarShotVelocity = 21300;
 
-    public static final double kPopShotHoodPosition = 2.25;
-    public static final double kLineShotHoodPosition = .95;
+    public static final double kPopShotHoodPosition = 1.90;
+    public static final double kLineShotHoodPosition = .50;
     public static final double kTrenchShotHoodPosition = 1.0;
-    public static final double kFarShotHoodPosition = .6;
+    public static final double kFarShotHoodPosition = .4;
 
     public static final double kBallProximity = 1.0;
     
