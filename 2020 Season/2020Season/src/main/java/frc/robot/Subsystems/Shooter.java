@@ -99,7 +99,12 @@ public class Shooter implements ISubsystem {
     }
     public boolean goShoot()
     {
-        boolean shooterAtSpeed = (Math.abs(_leftMotor.getClosedLoopError()) < 500);
+        boolean shooterAtSpeed = false;
+        if (_currentShot == "Far Shot") {
+            shooterAtSpeed = (Math.abs(_leftMotor.getClosedLoopError()) < 1000);
+        } else {
+            shooterAtSpeed = (Math.abs(_leftMotor.getClosedLoopError()) < 500);
+        }
         
         return shooterAtSpeed && _hoodPositionPID.atSetpoint();
     }

@@ -362,14 +362,16 @@ public class Robot extends TimedRobot {
         }
         break;
       case 1:
-        _collector.index();
+        //_collector.index();
         _collector.succ();
         _drivetrain.startPath();
+        _autonomousLoops = 0;
         _autonomousCase++;
         break;
       case 2:
         _collector.succ();
-        _collector.index();
+        _collector.goUp();
+        //_collector.index();
         _drivetrain.followPath();
         if (_drivetrain.isPathFinished())
         {
@@ -380,7 +382,7 @@ public class Robot extends TimedRobot {
         }
         break;
       case 3:
-        _collector.index();
+        //_collector.index();
         _drivetrain.tankDriveVolts(0, 0);
         if (_autonomousLoops > 0) {
           _autonomousLoops = 0;
@@ -389,7 +391,7 @@ public class Robot extends TimedRobot {
         }
         break;
       case 4:
-        _collector.index();
+        //_collector.index();
         _limelight.setAimbot();
         _shooter.readyShot();
         _drivetrain.followPath();
@@ -487,7 +489,12 @@ public class Robot extends TimedRobot {
       } else if (Math.abs(_operatorController.getTriggerAxis(Hand.kRight)) > 0.05)
       {
         _collector.empty();
-      } else {
+      } 
+      //else if (_operatorController.getStickButton(Hand.kLeft))
+      //{
+      //  _collector.index();
+      //}
+      else {
         _collector.stopConveyor();
       }
     }
@@ -514,8 +521,13 @@ public class Robot extends TimedRobot {
     }
     double throttle = -_driverController.getY(Hand.kLeft);
     double turn = _driverController.getX(Hand.kRight);
+    double dampen = .80;
+    if (_driverController.getBumper(Hand.kLeft))
+    {
+      dampen = 1.0;
+    }
   
-    _drivetrain.FunnyDrive(throttle * .80, turn + augmentTurn);
+    _drivetrain.FunnyDrive(throttle * dampen, turn + augmentTurn);
     if (_drivetrain.isTurnFinished())
       {
         SmartDashboard.putBoolean("lockedOn", true);

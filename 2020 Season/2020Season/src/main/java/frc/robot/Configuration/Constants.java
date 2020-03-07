@@ -208,7 +208,7 @@ public final class Constants {
     public static final double kPopShotVelocity = 13000;
     public static final double kLineShotVelocity = 15000;
     public static final double kTrenchShotVelocity = 19000;
-    public static final double kFarShotVelocity = 21300;
+    public static final double kFarShotVelocity = 21000;
 
     public static final double kPopShotHoodPosition = 1.90;
     public static final double kLineShotHoodPosition = .65;
