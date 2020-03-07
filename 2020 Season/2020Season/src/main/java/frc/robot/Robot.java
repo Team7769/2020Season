@@ -193,6 +193,7 @@ public class Robot extends TimedRobot {
         _shooter.stop();
         _collector.stopFeed();
         _collector.stop();
+        _collector.stopConveyor();
         _collector.index();
         _collector.retractCollector();
         _limelight.setDashcam();
@@ -275,7 +276,7 @@ public class Robot extends TimedRobot {
 
     var adjust = _drivetrain.followTarget();
     _drivetrain.FunnyDrive(0, adjust);
-    
+    _collector.openHatch();
     if(_shooter.goShoot()){
       _collector.feed();
     } else {
@@ -353,6 +354,7 @@ public class Robot extends TimedRobot {
           _drivetrain.setLineToTrenchPath();
           _limelight.setDashcam();
           _collector.succ();
+          _collector.stopConveyor();
           _collector.stopFeed();
           _shooter.stop();
           _shooter.stopHood();
@@ -472,6 +474,7 @@ public class Robot extends TimedRobot {
     }
     if (Math.abs(_driverController.getTriggerAxis(Hand.kRight)) > 0.05)
     {
+      _collector.openHatch();
       if (_shooter.goShoot())
       {
         _collector.feed();
@@ -512,7 +515,7 @@ public class Robot extends TimedRobot {
     double throttle = -_driverController.getY(Hand.kLeft);
     double turn = _driverController.getX(Hand.kRight);
   
-    _drivetrain.FunnyDrive(throttle * .85, turn + augmentTurn);
+    _drivetrain.FunnyDrive(throttle * .80, turn + augmentTurn);
     if (_drivetrain.isTurnFinished())
       {
         SmartDashboard.putBoolean("lockedOn", true);

@@ -124,9 +124,13 @@ public class Collector implements ISubsystem {
         _innerCollector.set(-_innerCollectorSpeed);
         _outerCollector.set(_outerCollectorSpeed);
     }
-    public void feed()
+    public void openHatch()
     {
         _ballStop.set(false);
+    }
+    public void feed()
+    {
+        //_ballStop.set(false);
         _frontConveyor.set(_conveyorSpeed);
         _indexing = false;
 
@@ -145,7 +149,7 @@ public class Collector implements ISubsystem {
         _frontConveyor.set(0);
     }
     public void stopFeed() {
-        _ballStop.set(true);
+        //_ballStop.set(true);
         if (!_indexing)
         {
             _frontConveyor.set(0);
