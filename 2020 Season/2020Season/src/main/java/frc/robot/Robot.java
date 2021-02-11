@@ -383,6 +383,8 @@ public class Robot extends TimedRobot {
         break;
       case 3:
         //_collector.index();
+        _collector.stop();
+        _collector.stopConveyor();
         _drivetrain.tankDriveVolts(0, 0);
         if (_autonomousLoops > 0) {
           _autonomousLoops = 0;

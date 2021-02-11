@@ -153,8 +153,8 @@ public final class Constants {
     //public static final double kMaxSpeedMetersPerSecond = 1.25;
     //public static final double kMaxAccelerationMetersPerSecondSquared = 1.25;
 
-    public static final double kMaxSpeedMetersPerSecond = 1.25;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 1.25;
+    public static final double kMaxSpeedMetersPerSecond = 1.65;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 1.65;
 
     //Path Following
     public static final double kPathFollowingkP = 1.5; //16.1
