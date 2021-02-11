@@ -46,9 +46,9 @@ public class Collector implements ISubsystem {
 
         _backConveyor.follow(_frontConveyor, true);
 
-        _innerCollectorSpeed = .3;
-        _outerCollectorSpeed = .6;
-        _conveyorSpeed = .25;
+        _innerCollectorSpeed = .8;
+        _outerCollectorSpeed = .8;
+        _conveyorSpeed = .3;
         _indexing = true;
         _ballCount = 0;
         _hasCounted = false;
@@ -86,7 +86,7 @@ public class Collector implements ISubsystem {
     }
     public void stop()
     {
-        _frontConveyor.set(0);
+        //_frontConveyor.set(0);
         _innerCollector.set(0);
         _outerCollector.set(0);
     }
@@ -124,9 +124,13 @@ public class Collector implements ISubsystem {
         _innerCollector.set(-_innerCollectorSpeed);
         _outerCollector.set(_outerCollectorSpeed);
     }
+    public void openHatch()
+    {
+        _ballStop.set(false);
+    }
     public void feed()
     {
-        _ballStop.set(true);
+        //_ballStop.set(false);
         _frontConveyor.set(_conveyorSpeed);
         _indexing = false;
 
@@ -139,8 +143,13 @@ public class Collector implements ISubsystem {
         //    _hasLeft = false;
         //}
     }
+    public void stopConveyor()
+    {
+        _ballStop.set(true);
+        _frontConveyor.set(0);
+    }
     public void stopFeed() {
-        _ballStop.set(false);
+        //_ballStop.set(true);
         if (!_indexing)
         {
             _frontConveyor.set(0);

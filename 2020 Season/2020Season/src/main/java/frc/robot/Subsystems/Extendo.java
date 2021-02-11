@@ -55,7 +55,7 @@ public class Extendo implements ISubsystem {
     }
     public void extend() 
     {
-        setSpeed(_extendoSpeed);
+        setSpeed(1.0);
     }
     public void unextend()
     {
@@ -67,11 +67,11 @@ public class Extendo implements ISubsystem {
     }
     public void extendoLock()
     {
-        _extendoSolenoid.set(Value.kForward);
+        _extendoSolenoid.set(Value.kReverse);
     }
     public void extendoRelease()
     {
-        _extendoSolenoid.set(Value.kReverse);
+        _extendoSolenoid.set(Value.kForward);
     }
     
     @Override

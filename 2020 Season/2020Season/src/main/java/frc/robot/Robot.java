@@ -70,8 +70,8 @@ public class Robot extends TimedRobot {
     //_spinnyThingy = SpinnyThingy.GetInstance();
     _limelight = Limelight.GetInstance();
     _extendo = Extendo.GetInstance();
-    //_compressor = new Compressor();
-    //_compressor.start();
+    _compressor = new Compressor();
+    _compressor.start();
 
     _subsystems = new ArrayList<ISubsystem>();
 
@@ -127,14 +127,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    
-    _drivetrain.resetEncoders();
     _drivetrain.resetGyro();
-    _drivetrain.updatePose();
-    _drivetrain.resetPIDControllers();
+    resetOdometry();
     _autonomousLoops = 0;
     _autonomousCase = 0;
     _aimLoops = 0;
+  }
+  public void resetOdometry()
+  {
+    _drivetrain.resetEncoders();
+    _drivetrain.updatePose();
+    _drivetrain.resetPIDControllers();
   }
 
   /**
@@ -159,11 +162,52 @@ public class Robot extends TimedRobot {
         stealAuto();
         break;
       case 4:
-        //driveForwardAuto();
+        driveForwardAuto();
         break;
     }
 
     _autonomousLoops++;
+  }
+  public void driveForwardAuto()
+  {
+    switch (_autonomousCase)
+    {
+      case 0:
+        _shooter.setLineShot();
+        _collector.succ();
+        _limelight.setAimbot();
+        _shooter.readyShot();
+        _autonomousCase++;
+        break;
+      case 1:
+        autonomousAimAndShoot();
+        if (_autonomousLoops >= 250)
+        {
+          _drivetrain.FunnyDrive(-.4, 0);
+          _autonomousLoops = 0;
+          _autonomousCase++;
+        }
+        break;
+      case 2:
+        _shooter.stopHood();
+        _shooter.stop();
+        _collector.stopFeed();
+        _collector.stop();
+        _collector.stopConveyor();
+        _collector.index();
+        _collector.retractCollector();
+        _limelight.setDashcam();
+        _drivetrain.FunnyDrive(-.4, 0);
+        if (_autonomousLoops > 150)
+        {
+          _drivetrain.FunnyDrive(0, 0);
+          _autonomousCase++;
+        }
+        break;
+      case 3:
+        _drivetrain.FunnyDrive(0, 0);
+        break;
+    }
   }
   public void stealAuto()
   {
@@ -172,15 +216,15 @@ public class Robot extends TimedRobot {
         //Start path from the line to the enemy trench
         _drivetrain.setLineToStealPath();
         _drivetrain.startPath();
-        //_shooter.setLineShot();
-        //_collector.index();
+        _shooter.setLineShot();
+        _collector.succ();
+        _collector.index();
         _autonomousCase++;
         break;
       case 1:
         //End after picking up the trench balls. Start path to the goal.
         _drivetrain.followPath();
-        //_collector.succ();
-        //_collector.index();
+        _collector.index();
         if (_drivetrain.isPathFinished())
         {
           _drivetrain.setStealToGoalPath();
@@ -201,32 +245,42 @@ public class Robot extends TimedRobot {
       case 3:
         //Drive path to the goal.
         _drivetrain.followPath();
-        //_collector.index();
+        _shooter.readyShot();
+        _collector.index();
         if (_drivetrain.isPathFinished())
         {
+          _autonomousLoops = 0;
           _autonomousCase++;
         }
         break;
       case 4:
         //Turn to the goal.
-        //_shooter.readyShot();
-        //_collector.index();
-        if (turnToAngle(0))
+        _shooter.readyShot();
+        _collector.index();
+        if (turnToAngle(0) || _autonomousLoops > 150)
         {
+          
+          _limelight.setAimbot();
           _autonomousCase++;
         } else {
           _aimLoops = 0;
         }
         break;
       case 5:
-        //_shooter.readyShot();
-        //if(_shooter.goShoot()){
-        //  _collector.feed();
-        //} else {
-        //  _collector.stopFeed();
-        //}
-        _drivetrain.FunnyDrive(0, 0);
+        autonomousAimAndShoot();
         break;
+    }
+  }
+  public void autonomousAimAndShoot() {
+    _shooter.readyShot();
+
+    var adjust = _drivetrain.followTarget();
+    _drivetrain.FunnyDrive(0, adjust);
+    _collector.openHatch();
+    if(_shooter.goShoot()){
+      _collector.feed();
+    } else {
+      _collector.stopFeed();
     }
   }
   public void diamondFirstTrenchAuto()
@@ -292,11 +346,32 @@ public class Robot extends TimedRobot {
   {
     switch (_autonomousCase) {
       case 0:
-        _drivetrain.setLineToTrenchPath();
-        _drivetrain.startPath();
-        _autonomousCase++;
+        _limelight.setAimbot();
+        _shooter.setLineShot();
+        autonomousAimAndShoot();
+        if (_autonomousLoops >= 150)
+        {
+          _drivetrain.setLineToTrenchPath();
+          _limelight.setDashcam();
+          _collector.succ();
+          _collector.stopConveyor();
+          _collector.stopFeed();
+          _shooter.stop();
+          _shooter.stopHood();
+          _autonomousCase++;
+        }
         break;
       case 1:
+        //_collector.index();
+        _collector.succ();
+        _drivetrain.startPath();
+        _autonomousLoops = 0;
+        _autonomousCase++;
+        break;
+      case 2:
+        _collector.succ();
+        _collector.goUp();
+        //_collector.index();
         _drivetrain.followPath();
         if (_drivetrain.isPathFinished())
         {
@@ -306,7 +381,10 @@ public class Robot extends TimedRobot {
           //_autonomousCase = 7769;
         }
         break;
-      case 2:
+      case 3:
+        //_collector.index();
+        _collector.stop();
+        _collector.stopConveyor();
         _drivetrain.tankDriveVolts(0, 0);
         if (_autonomousLoops > 0) {
           _autonomousLoops = 0;
@@ -314,42 +392,19 @@ public class Robot extends TimedRobot {
           _autonomousCase++;
         }
         break;
-      case 3:
+      case 4:
+        //_collector.index();
+        _limelight.setAimbot();
+        _shooter.readyShot();
         _drivetrain.followPath();
         if (_drivetrain.isPathFinished())
         {
-          _drivetrain.setLineToLeftDiamondPath();
           _autonomousCase++;
+          _autonomousLoops = 0;
         }
-        break;
-      case 4:
-        _drivetrain.tankDriveVolts(0, 0);
-        _drivetrain.startPath();
-        _autonomousCase++;
-
         break;
       case 5:
-        _drivetrain.followPath();
-        if (_drivetrain.isPathFinished())
-        {
-          _drivetrain.setLeftDiamondToLinePath();
-          _autonomousCase++;
-        }
-        break;
-      case 6:
-        _drivetrain.tankDriveVolts(0, 0);
-        _drivetrain.startPath();
-        _autonomousCase++;
-        break;
-      case 7:
-        _drivetrain.followPath();
-        if (_drivetrain.isPathFinished())
-        {
-          _autonomousCase++;
-        }
-        break;
-      case 8:
-        _drivetrain.FunnyDrive(0, 0);
+        autonomousAimAndShoot();
         break;
       case 7769:
         _drivetrain.tankDriveVolts(0, 0);
@@ -423,6 +478,7 @@ public class Robot extends TimedRobot {
     }
     if (Math.abs(_driverController.getTriggerAxis(Hand.kRight)) > 0.05)
     {
+      _collector.openHatch();
       if (_shooter.goShoot())
       {
         _collector.feed();
@@ -430,14 +486,19 @@ public class Robot extends TimedRobot {
         _collector.stopFeed();
       }
     } else {
-      /*if (_operatorController.getStartButton()) {
+      if (Math.abs(_operatorController.getTriggerAxis(Hand.kLeft)) > 0.05) {
         _collector.goUp();
-      } else if (_operatorController.getBackButton())
+      } else if (Math.abs(_operatorController.getTriggerAxis(Hand.kRight)) > 0.05)
       {
         _collector.empty();
-      } else {
-        _collector.stop();
-      }*/
+      } 
+      //else if (_operatorController.getStickButton(Hand.kLeft))
+      //{
+      //  _collector.index();
+      //}
+      else {
+        _collector.stopConveyor();
+      }
     }
     if (Math.abs(_driverController.getTriggerAxis(Hand.kLeft)) > 0.05)
     {
@@ -462,8 +523,13 @@ public class Robot extends TimedRobot {
     }
     double throttle = -_driverController.getY(Hand.kLeft);
     double turn = _driverController.getX(Hand.kRight);
+    double dampen = .80;
+    if (_driverController.getBumper(Hand.kLeft))
+    {
+      dampen = 1.0;
+    }
   
-    _drivetrain.FunnyDrive(throttle, turn + augmentTurn);
+    _drivetrain.FunnyDrive(throttle * dampen, turn + augmentTurn);
     if (_drivetrain.isTurnFinished())
       {
         SmartDashboard.putBoolean("lockedOn", true);
@@ -510,8 +576,6 @@ public class Robot extends TimedRobot {
       _collector.stop();
     }
     
-    
-    _collector.index();
   }
   public void teleopExtendo()
   {
